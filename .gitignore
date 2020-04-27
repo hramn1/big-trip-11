@@ -14,5 +14,4 @@ node_modules/
 # Файлы сборки (допишите самостоятельно)
 public/bundle.js
 public/bundle.js.map
-# Файлы линукса
-.directory
+

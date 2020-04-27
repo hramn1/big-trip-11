@@ -1,4 +1,4 @@
-export const getTemplatePointRoute = ()=> {
+export const getTemplatePointRoute = () => {
   return (
     `<li class="trip-days__item  day">
               <div class="day__info">
