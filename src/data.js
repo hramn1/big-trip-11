@@ -67,7 +67,21 @@ export const generateTripData = () => {
     "price": Math.round(generatorRandom.generateRandomNumber(5, 200)),
     "description": generateDesk(),
     "picture": `http://picsum.photos/248/152?r=${Math.random()}`,
-
-
   };
 };
+export const generateFilters = () => {
+  return [
+    {
+      name: `Everything`,
+      currentFilter: true
+    },
+    {
+      name: `Future`,
+      currentFilter: false
+    },
+    {
+      name: `Past`,
+      currentFilter: false
+    },
+  ]
+}

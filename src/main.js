@@ -6,6 +6,7 @@ import {getTemplateFormCreate} from './components/form';
 import {getTemplatePointRouteList} from './components/route-list';
 import {getTemplatePointRoute} from './components/route-point';
 import {generateTripData} from './data';
+import {generateFilters} from './data';
 import {TOTALTRIP} from "./utils";
 
 
@@ -15,7 +16,7 @@ const render = (container, template, place = `beforeend`) => {
 
 const tripMenu = document.querySelector(`.trip-main__trip-controls.trip-controls`);
 render(tripMenu, getTemplateMenu());
-render(tripMenu, getTemplateFilters());
+render(tripMenu, getTemplateFilters(generateFilters()));
 const tripMainContainer = document.querySelector(`.trip-main`);
 render(tripMainContainer, getTemplateInfoRoute(), `afterbegin`);
 const mainContent = document.querySelector(`.trip-events`);
@@ -30,4 +31,3 @@ const arrTrip = [];
 for (let i = 0; i < TOTALTRIP; i++) {
   arrTrip.push(generateTripData());
 }
-    console.log(arrTrip);
