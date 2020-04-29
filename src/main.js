@@ -5,7 +5,8 @@ import {getTemplateSort} from './components/sort';
 import {getTemplateFormCreate} from './components/form';
 import {getTemplatePointRouteList} from './components/route-list';
 import {getTemplatePointRoute} from './components/route-point';
-
+import {generateTripData} from './data';
+console.log(generateTripData());
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
