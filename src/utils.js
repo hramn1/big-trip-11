@@ -1,3 +1,4 @@
+export const TOTALTRIP = 15;
 export const generatorRandom = {
   generateRandomNumber(min, max) {
     return (min + Math.random() * (max - min)).toFixed(1);

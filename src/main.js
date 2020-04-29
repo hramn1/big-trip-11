@@ -6,7 +6,8 @@ import {getTemplateFormCreate} from './components/form';
 import {getTemplatePointRouteList} from './components/route-list';
 import {getTemplatePointRoute} from './components/route-point';
 import {generateTripData} from './data';
-console.log(generateTripData());
+import {TOTALTRIP} from "./utils";
+
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -25,4 +26,8 @@ const routeList = document.querySelector(`.trip-days`);
 for (let i = 0; i < 3; i++) {
   render(routeList, getTemplatePointRoute());
 }
-
+const arrTrip = [];
+for (let i = 0; i < TOTALTRIP; i++) {
+  arrTrip.push(generateTripData());
+}
+    console.log(arrTrip);

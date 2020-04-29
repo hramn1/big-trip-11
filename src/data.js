@@ -56,12 +56,18 @@ const Offer = {
   }
 };
 const generateDesk = () => {
-  const deskStr = generatorRandom.splitStr(tripData.desciption);
-  deskStr.length = Math.round(generatorRandom.generateRandomNumber(1, 3));
+  const deskStr = generatorRandom.splitStr(tripData.finalDestination.description);
+  deskStr.length = Math.round(generatorRandom.generateRandomNumber(1, 5));
   return deskStr.join();
 };
 export const generateTripData = () => {
   return {
-    type: tripData.type[Math.round(generatorRandom.generateRandomCount(4))],
+    "type": tripData.type[Math.round(generatorRandom.generateRandomCount(tripData.type.length))],
+    "id": Math.round(generatorRandom.generateRandomNumber(1, 1000)),
+    "price": Math.round(generatorRandom.generateRandomNumber(5, 200)),
+    "description": generateDesk(),
+    "picture": `http://picsum.photos/248/152?r=${Math.random()}`,
+
+
   };
 };
