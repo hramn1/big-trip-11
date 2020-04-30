@@ -3,10 +3,13 @@ import {getTemplateInfoRoute} from './components/info-trip';
 import {getTemplateFilters} from './components/filters';
 import {getTemplateSort} from './components/sort';
 import {getTemplateFormCreate} from './components/form';
-import {getTemplatePointRouteList} from './components/route-list';
 import {getTemplatePointRoute} from './components/route-point';
+import {getTemplateTripDays} from './components/trip-days';
 import {generateTripData} from './data';
 import {generateFilters} from './data';
+import {generateSort} from './data';
+import {tripData} from './data';
+import {offers} from './data';
 import {TOTALTRIP} from "./utils";
 
 
@@ -20,14 +23,17 @@ render(tripMenu, getTemplateFilters(generateFilters()));
 const tripMainContainer = document.querySelector(`.trip-main`);
 render(tripMainContainer, getTemplateInfoRoute(), `afterbegin`);
 const mainContent = document.querySelector(`.trip-events`);
-render(mainContent, getTemplateSort());
-render(mainContent, getTemplateFormCreate());
-render(mainContent, getTemplatePointRouteList());
-const routeList = document.querySelector(`.trip-days`);
-for (let i = 0; i < 3; i++) {
-  render(routeList, getTemplatePointRoute());
-}
+render(mainContent, getTemplateSort(generateSort()));
+
 const arrTrip = [];
 for (let i = 0; i < TOTALTRIP; i++) {
   arrTrip.push(generateTripData());
+}
+render(mainContent, getTemplateFormCreate(arrTrip, offers, tripData));
+
+const routeList = document.querySelector(`.trip-days`);
+render(mainContent, getTemplateTripDays(arrTrip));
+
+for (let i = 0; i < 3; i++) {
+  render(routeList, getTemplatePointRoute());
 }

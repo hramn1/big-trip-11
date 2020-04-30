@@ -1,7 +1,7 @@
 import {generatorRandom} from './utils';
-const tripData = {
+export const tripData = {
   "id": [1, 100],
-  "type": [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check`, `Sightseeing`, `Restaurant`],
+  "type": [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`],
   "finalDestination": {
     "city": [`Hell`, `Nifelheim`, `Moscow`],
     "picture": `http://picsum.photos/248/152?r=${Math.random()}`,
@@ -12,53 +12,80 @@ const tripData = {
       Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
   },
   "price": [5, 200],
+  "beginTrip": new Date(),
 };
-const Offer = {
-  LUGGAGE: {
+export const offers = [
+  {
     id: `luggage`,
-    title: `Add luggage`
+    title: `Add luggage`,
+    isChecked: true,
+    price: 20,
   },
-  COMFORT: {
+  {
     id: `comfort`,
-    title: `Switch to comfort class`
+    title: `Switch to comfort class`,
+    isChecked: true,
+    price: 50,
   },
-  MEAL: {
+  {
     id: `meal`,
     title: `Add meal`,
+    isChecked: true,
+    price: 20,
   },
-  SEATS: {
+  {
     id: `seats`,
     title: `Choose seats`,
+    isChecked: true,
+    price: 60,
   },
-  TRAIN: {
+  {
     id: `train`,
     title: `Travel by train`,
+    isChecked: true,
+    price: 50,
   },
-  UBER: {
+  {
     id: `uber`,
     title: `Order Uber`,
+    isChecked: false,
+    price: 60,
   },
-  LUNCH: {
+  {
     id: `lunch`,
     title: `Lunch in city`,
+    isChecked: false,
+    price: 20,
   },
-  CAR: {
+  {
     id: `car`,
     title: `Rent a car`,
+    isChecked: true,
+    price: 20,
   },
-  TICKETS: {
+  {
     id: `tickets`,
     title: `Book tickets`,
+    isChecked: false,
+    price: 120,
   },
-  BREAKFAST: {
+  {
     id: `breakfast`,
     title: `Add breakfast`,
+    isChecked: false,
+    price: 20,
   }
-};
+];
 const generateDesk = () => {
   const deskStr = generatorRandom.splitStr(tripData.finalDestination.description);
   deskStr.length = Math.round(generatorRandom.generateRandomNumber(1, 5));
   return deskStr.join();
+};
+let intervalTrip = Math.round(generatorRandom.generateRandomNumber(5, 30));
+let timeTrip = Math.round(generatorRandom.generateRandomNumber(30, 180));
+const getNewDateTrip = () => {
+  let tripDate = tripData.beginTrip;
+  return new Date(tripDate.setMinutes(tripDate.getMinutes() + intervalTrip + timeTrip));
 };
 export const generateTripData = () => {
   return {
@@ -67,6 +94,9 @@ export const generateTripData = () => {
     "price": Math.round(generatorRandom.generateRandomNumber(5, 200)),
     "description": generateDesk(),
     "picture": `http://picsum.photos/248/152?r=${Math.random()}`,
+    "intervalTrip": intervalTrip,
+    "timeTrip": timeTrip,
+    "tripDate": getNewDateTrip(),
   };
 };
 export const generateFilters = () => {
@@ -83,5 +113,21 @@ export const generateFilters = () => {
       name: `Past`,
       currentFilter: false
     },
-  ]
-}
+  ];
+};
+export const generateSort = () => {
+  return [
+    {
+      name: `event`,
+      currentFilter: false
+    },
+    {
+      name: `time`,
+      currentFilter: false
+    },
+    {
+      name: `price`,
+      currentFilter: false
+    }
+  ];
+};
