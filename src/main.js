@@ -29,11 +29,13 @@ const arrTrip = [];
 for (let i = 0; i < TOTALTRIP; i++) {
   arrTrip.push(generateTripData());
 }
+
 render(mainContent, getTemplateFormCreate(arrTrip, offers, tripData));
 
-const routeList = document.querySelector(`.trip-days`);
 render(mainContent, getTemplateTripDays(arrTrip));
-
-for (let i = 0; i < 3; i++) {
-  render(routeList, getTemplatePointRoute());
-}
+const routeList = document.querySelectorAll(`.trip-days__item `);
+routeList.forEach((it) => {
+  const dayDateElement = it.getAttribute(`data-day`);
+  const showingEvents = arrTrip.filter((trip) => `${trip.tripDate.getMonth()} ${trip.tripDate.getDate()}` === dayDateElement);
+  render(it, getTemplatePointRoute(showingEvents));
+});

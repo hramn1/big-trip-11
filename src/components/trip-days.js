@@ -25,7 +25,7 @@ export const getTemplateTripDays = (trips) => {
     }
   };
   const getTotalDay = () => {
-    const countDay = (trips[trips.length - 1].tripDate - trips[0].tripDate) / 1000 / 60 / 60 / 24;
+    const countDay = Math.round((trips[trips.length - 1].tripDate - trips[0].tripDate) / 1000 / 60 / 60 / 24) + 1;
     return countDay;
   };
   const arrDay = [];
@@ -33,17 +33,16 @@ export const getTemplateTripDays = (trips) => {
     arrDay.push(i + 1);
   }
   const templateDay = (it) => {
-
     dayOfMouth = dayOfMouth + 1;
     if (dayOfMouth > limitDayMouth()) {
       dayOfMouth = 1;
       countOfMouth += 1;
     }
     return (
-      `<li class="trip-days__item  day" data-day="${countOfMouth}">
+      `<li class="trip-days__item  day" data-day="${countOfMouth} ${dayOfMouth}">
         <div class="day__info">
           <span class="day__counter">${it}</span>
-          <time class="day__date" datetime="2019-03-18">${MONTH_NAMES[countOfMouth]} ${dayOfMouth}</time>
+          <time class="day__date" datetime="${MONTH_NAMES[countOfMouth]} ${dayOfMouth}">${MONTH_NAMES[countOfMouth]} ${dayOfMouth}</time>
         </div>
         <ul class="trip-events__list"></ul>
       </li>`

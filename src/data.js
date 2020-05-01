@@ -81,22 +81,31 @@ const generateDesk = () => {
   deskStr.length = Math.round(generatorRandom.generateRandomNumber(1, 5));
   return deskStr.join();
 };
-let intervalTrip = Math.round(generatorRandom.generateRandomNumber(5, 30));
-let timeTrip = Math.round(generatorRandom.generateRandomNumber(30, 180));
-const getNewDateTrip = () => {
-  let tripDate = tripData.beginTrip;
-  return new Date(tripDate.setMinutes(tripDate.getMinutes() + intervalTrip + timeTrip));
-};
+
 export const generateTripData = () => {
+  let intervalTrip = Math.round(generatorRandom.generateRandomNumber(5, 30));
+  let timeTrip = Math.round(generatorRandom.generateRandomNumber(30, 180));
+  const getNewDateTrip = () => {
+    let tripDate = tripData.beginTrip;
+    return new Date(tripDate.setMinutes(tripDate.getMinutes() + intervalTrip + timeTrip));
+  };
+  const getEndDateTrip = () => {
+    let tripDate = tripData.beginTrip;
+    return new Date(tripDate.setMinutes(tripDate.getMinutes() + timeTrip));
+  };
+
   return {
     "type": tripData.type[Math.round(generatorRandom.generateRandomCount(tripData.type.length))],
     "id": Math.round(generatorRandom.generateRandomNumber(1, 1000)),
+    "city": tripData.finalDestination.city[Math.round(generatorRandom.generateRandomCount(tripData.finalDestination.city.length))],
     "price": Math.round(generatorRandom.generateRandomNumber(5, 200)),
     "description": generateDesk(),
     "picture": `http://picsum.photos/248/152?r=${Math.random()}`,
     "intervalTrip": intervalTrip,
     "timeTrip": timeTrip,
     "tripDate": getNewDateTrip(),
+    "tripDateEnd": getEndDateTrip(),
+    "offers": offers.slice(Math.round(generatorRandom.generateRandomNumber(0, 3)), Math.round(generatorRandom.generateRandomNumber(3, 7)))
   };
 };
 export const generateFilters = () => {
