@@ -13,6 +13,12 @@ export const getTemplateTripDays = (trips) => {
     `NOV`,
     `DEC`
   ];
+  const TIME_VALUES = {
+    millisecond: 1000,
+    hour: 24,
+    second: 60,
+    minutes: 60,
+  };
   let dayOfMouth = trips[0].tripDate.getDate() - 1;
   let countOfMouth = trips[0].tripDate.getMonth();
   const limitDayMouth = () => {
@@ -25,7 +31,7 @@ export const getTemplateTripDays = (trips) => {
     }
   };
   const getTotalDay = () => {
-    const countDay = Math.round((trips[trips.length - 1].tripDate - trips[0].tripDate) / 1000 / 60 / 60 / 24) + 1;
+    const countDay = Math.round((trips[trips.length - 1].tripDate - trips[0].tripDate) / TIME_VALUES.millisecond / TIME_VALUES.second / TIME_VALUES.minutes / TIME_VALUES.hour) + 1;
     return countDay;
   };
   const arrDay = [];
@@ -48,7 +54,7 @@ export const getTemplateTripDays = (trips) => {
       </li>`
     );
   };
-  const dayMarkup = arrDay.map((it, i) => templateDay(it, i === 0)).join(`\n`);
+  const dayMarkup = arrDay.map((it) => templateDay(it)).join(`\n`);
   return (
     `<ul class="trip-days">${dayMarkup}</ul>`
   );

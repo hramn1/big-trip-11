@@ -1,5 +1,5 @@
 const createSort = (sorts) => {
-  const isChecked = (sorts.currentFilter === true) ? ` checked` : ``;
+  const isChecked = (sorts.currentFilter) ? ` checked` : ``;
   return (
     `<div class="trip-sort__item  trip-sort__item--${sorts.name}">
         <input id="sort-${sorts.name}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sorts.name}" ${isChecked}>

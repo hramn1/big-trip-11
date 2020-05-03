@@ -77,9 +77,8 @@ export const offers = [
   }
 ];
 const generateDesk = () => {
-  const deskStr = generatorRandom.splitStr(tripData.finalDestination.description);
-  deskStr.length = Math.round(generatorRandom.generateRandomNumber(1, 5));
-  return deskStr.join();
+  let deskStr = generatorRandom.splitStr(tripData.finalDestination.description);
+  return deskStr.slice(0, Math.round(generatorRandom.generateRandomNumber(1, 5))).join();
 };
 
 export const generateTripData = () => {
@@ -101,8 +100,8 @@ export const generateTripData = () => {
     "price": Math.round(generatorRandom.generateRandomNumber(5, 200)),
     "description": generateDesk(),
     "picture": `http://picsum.photos/248/152?r=${Math.random()}`,
-    "intervalTrip": intervalTrip,
-    "timeTrip": timeTrip,
+    intervalTrip,
+    timeTrip,
     "tripDate": getNewDateTrip(),
     "tripDateEnd": getEndDateTrip(),
     "offers": offers.slice(Math.round(generatorRandom.generateRandomNumber(0, 3)), Math.round(generatorRandom.generateRandomNumber(3, 7)))

@@ -8,11 +8,11 @@ export const getTemplateFormCreate = (trip, offers, tripData) => {
         </div>
     `;
   };
-  const typeTransportMarkup = tripData.type.slice(0, 7).map((it, i) => typeTransport(it, i === 0)).join(`\n`);
-  const typeActivityMarkup = tripData.type.slice(7).map((it, i) => typeTransport(it, i === 0)).join(`\n`);
+  const typeTransportMarkup = tripData.type.slice(0, 7).map((it) => typeTransport(it)).join(`\n`);
+  const typeActivityMarkup = tripData.type.slice(7).map((it) => typeTransport(it)).join(`\n`);
   // Офер
   const getOffers = (it) => {
-    const isChecked = (it.isChecked === true) ? ` checked` : ``;
+    const isChecked = (it.isChecked) ? ` checked` : ``;
     return `
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${it.id}-1" type="checkbox" name="event-offer-${it.id}" ${isChecked}>
@@ -23,22 +23,19 @@ export const getTemplateFormCreate = (trip, offers, tripData) => {
       </label>
     </div>`;
   };
-  const offersMarkup = offers.map((it, i) => getOffers(it, i === 0)).join(`\n`);
+  const offersMarkup = offers.map((it) => getOffers(it)).join(`\n`);
   // Фото
   const offersPhotos = () => {
     return `<img class="event__photo" src="${tripData.finalDestination.picture}" alt="Event photo">`;
   };
-  const arrPhoto = [];
-  for (let i = 0; i < 5; i++) {
-    arrPhoto.push(offersPhotos());
-  }
+  const arrPhoto = Array(5).fill(offersPhotos());
   // города
   const cityTrip = (it) => {
     return `
       <option value="${it}"></option>
     `;
   };
-  const cityTripMarkup = tripData.finalDestination.city.map((it, i) => cityTrip(it, i === 0)).join(`\n`);
+  const cityTripMarkup = tripData.finalDestination.city.map((it) => cityTrip(it)).join(`\n`);
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
