@@ -1,4 +1,6 @@
-export const getTemplateFormCreate = (trip, offers, tripData) => {
+import {createElement} from "../utils";
+
+const getTemplateFormCreate = (trip, offers, tripData) => {
   // транспорт
   const typeTransport = (it) => {
     return `
@@ -116,3 +118,24 @@ export const getTemplateFormCreate = (trip, offers, tripData) => {
           </form>`
   );
 };
+export default class CreateFormNewEventTemplate {
+  constructor(trip, offers, tripData) {
+    this.filters = trip;
+    this.offers = offers;
+    this.tripData = tripData;
+
+    this._element = null;
+  }
+  getTemplate() {
+    return getTemplateFormCreate(this.filters, this.offers, this.tripData);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,6 @@
-export const getTemplateTripDays = (trips) => {
+import {createElement} from "../utils";
+
+const getTemplateTripDays = (trips) => {
   const MONTH_NAMES = [
     `JAN`,
     `FEB`,
@@ -59,3 +61,21 @@ export const getTemplateTripDays = (trips) => {
     `<ul class="trip-days">${dayMarkup}</ul>`
   );
 };
+export default class CreateTripDays {
+  constructor(trip) {
+    this.trip = trip;
+    this._element = null;
+  }
+  getTemplate() {
+    return getTemplateTripDays(this.trip);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

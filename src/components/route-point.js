@@ -1,13 +1,15 @@
+import {createElement} from "../utils";
+
 export const getTemplatePointRoute = (trip) => {
   const typeTripPoint = (it) => {
     const offerTripPoint = (item) => {
-      return (`
-                            <li class="event__offer">
-                        <span class="event__offer-title">${item.title}</span>
-                        &plus;
-                        &euro;&nbsp;<span class="event__offer-price">${item.price}</span>
-                       </li>
-      `);
+      return (
+        `<li class="event__offer">
+          <span class="event__offer-title">${item.title}</span>
+          &plus;
+          &euro;&nbsp;<span class="event__offer-price">${item.price}</span>
+          </li>`
+      );
     };
     const offerTripMarkup = it.offers.map((item) => offerTripPoint(item)).join(`\n`);
 
@@ -48,11 +50,26 @@ export const getTemplatePointRoute = (trip) => {
   };
   const typeTripMarkup = trip.map((it, i) => typeTripPoint(it, i === 0)).join(`\n`);
   return (
-    `
-                <li class="trip-events__item">
-${typeTripMarkup}
-                </li>
-
-  `
+    `<li class="trip-events__item">
+      ${typeTripMarkup}
+    </li>`
   );
 };
+export default class CreatePointRoute {
+  constructor(trip) {
+    this.trip = trip;
+    this._element = null;
+  }
+  getTemplate() {
+    return getTemplatePointRoute(this.trip);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
