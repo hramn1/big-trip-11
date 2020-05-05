@@ -127,9 +127,17 @@ export default class CreateEditEvent {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
+    this.bind();
     return this._element;
   }
   removeElement() {
     this._element = null;
+  }
+  openEvent() {}
+  bind() {
+    const element = this._element;
+    element.querySelector(`.event__rollup-btn`).addEventListener(`click`, (evt) => {
+      this.openEvent(evt);
+    });
   }
 }

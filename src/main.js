@@ -27,36 +27,18 @@ const renderBoard = (container) => {
       renderEvent(it, tripEvent);
     }
   }
-  // routeList.forEach((it) => {
-  //   const dayDateElement = it.getAttribute(`data-day`);
-  //   const showingEvents = arrTrip.filter((trip) => `${trip.tripDate.getMonth()} ${trip.tripDate.getDate()}` === dayDateElement);
-  //   for (let tripEvent of showingEvents){
-  //     renderEvent(it, tripEvent);
-  //   }
-  // })
-  //   // templatePointRoute.editForm = (evt) => {
-  //   //   alert('ds')
-  //   // }
-  //   render(it, templatePointRoute.getElement());
 };
 const renderEvent = (container, trip) => {
   const tripEvent = new CreatePointRoute(trip);
   const editEvent = new CreateEditEven(trip, tripData, offers);
-  // const templatePointRouteList = new CreateTripDays(arrTrip);
-  // render(container, templatePointRouteList.getElement());
-  // const routeList = document.querySelectorAll(`.trip-days__item `);
-  // routeList.forEach((it) => {
-  //   const dayDateElement = it.getAttribute(`data-day`);
-  //   const showingEvents = arrTrip.filter((trip) => `${trip.tripDate.getMonth()} ${trip.tripDate.getDate()}` === dayDateElement);
-  //   const templatePointRoute = new CreatePointRoute(showingEvents);
-  //   console.log(templatePointRoute)
   tripEvent.editForm = () => {
     container.replaceChild(editEvent.getElement(), tripEvent.getElement());
-  }
+  };
+  editEvent.openEvent = () => {
+    container.replaceChild(tripEvent.getElement(), editEvent.getElement());
+  };
   render(container, tripEvent.getElement());
-  //render(container, editEvent.getElement());
-  // })
-  }
+};
 const tripMenu = document.querySelector(`.trip-main__trip-controls.trip-controls`);
 const templateMenu = new CreateTemplateMenu();
 render(tripMenu, templateMenu.getElement());
@@ -69,9 +51,4 @@ const tripMainContainer = document.querySelector(`.trip-main`);
 render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
 const mainContent = document.querySelector(`.trip-events`);
 
-// форма нового ивента
-// const templateFormCreate = new CreateFormNewEventTemplate(arrTrip, offers, tripData);
-// render(mainContent, templateFormCreate.getElement());
-// ивенты
-//   renderEvent(mainContent);
-renderBoard(mainContent)
+renderBoard(mainContent);
