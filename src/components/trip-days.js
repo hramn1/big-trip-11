@@ -47,12 +47,14 @@ const getTemplateTripDays = (trips) => {
       countOfMouth += 1;
     }
     return (
-      `<li class="trip-days__item  day" data-day="${countOfMouth} ${dayOfMouth}">
+      `<li class="trip-days__item  day" >
         <div class="day__info">
           <span class="day__counter">${it}</span>
           <time class="day__date" datetime="${MONTH_NAMES[countOfMouth]} ${dayOfMouth}">${MONTH_NAMES[countOfMouth]} ${dayOfMouth}</time>
         </div>
-        <ul class="trip-events__list"></ul>
+        <ul class="trip-events__list">
+        <li class="trip-events__item" data-day="${countOfMouth} ${dayOfMouth}"></li>
+</ul>
       </li>`
     );
   };
