@@ -1,9 +1,10 @@
-export const TOTALTRIP = 15;
+export const TOTALTRIP = 0;
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTER: `after`
 };
+export const addZero = (number) => number.toString().padStart(2, `0`);
 export const generatorRandom = {
   generateRandomNumber(min, max) {
     return (min + Math.random() * (max - min)).toFixed(1);
