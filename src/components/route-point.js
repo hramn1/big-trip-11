@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import {createElement, addZero} from "../utils";
 
 const getTemplatePointRoute = (trip) => {
   const offerTripPoint = (item) => {
@@ -13,8 +13,17 @@ const getTemplatePointRoute = (trip) => {
   const offerTripMarkup = trip.offers.map((item) => offerTripPoint(item)).join(`\n`);
 
   const getHourMinuteStart = (tripDate) => {
-    const hourMinute = `${tripDate.getHours()}:${tripDate.getMinutes()}`;
+    const hourMinute = `${addZero(tripDate.getHours())}:${addZero(tripDate.getMinutes())}`;
     return hourMinute;
+  };
+  const formatTimeInterval = (diff) => {
+    const intervalMinutes = diff % 60;
+    diff = Math.floor(diff / 60); // hours
+    const intervalHours = diff % 24;
+    diff = Math.floor(diff / 24); // days
+    const intervalDays = diff;
+
+    return `${intervalDays ? intervalDays + `D ` : `` }${intervalHours ? intervalHours + `H ` : ``}${intervalMinutes}M`;
   };
   return (
     `<div class="event">
@@ -30,7 +39,7 @@ const getTemplatePointRoute = (trip) => {
           &mdash;
           <time class="event__end-time" datetime="${trip.tripDateEnd}">${getHourMinuteStart(trip.tripDateEnd)}</time>
         </p>
-        <p class="event__duration">${trip.timeTrip}M</p>
+        <p class="event__duration">${formatTimeInterval(trip.timeTrip)}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${trip.price}</span>
