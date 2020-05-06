@@ -1,4 +1,4 @@
-export const TOTALTRIP = 15;
+export const TOTALTRIP = 0;
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,

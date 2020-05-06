@@ -135,9 +135,9 @@ export default class CreateEditEvent {
   }
   openEvent() {}
   bind() {
-    const element = this._element;
-    element.querySelector(`.event__rollup-btn`).addEventListener(`click`, (evt) => {
+    this._element.querySelector(`.event__rollup-btn`).addEventListener(`click`, (evt) => {
       this.openEvent(evt);
+      this.removeElement();
     });
   }
 }
