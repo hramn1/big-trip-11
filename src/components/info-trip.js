@@ -1,6 +1,21 @@
 import {createElement} from "../utils";
 
-const getTemplateInfoRoute = () => {
+const getTemplateInfoRoute = (trips) => {
+  const getTotalPrice = () => {
+    let totalPrice = 0;
+    for (let it of trips){
+      totalPrice += it.price
+    }
+     return totalPrice;
+  }
+  const getVisitedCities = () => {
+    let City = new Set();
+    for (let it of trips){
+      City.add(it.city)
+    }
+    return City.values(2);
+  }
+  console.log(getVisitedCities())
   return (
     `<section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
@@ -10,17 +25,18 @@ const getTemplateInfoRoute = () => {
       </div>
 
       <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalPrice()}</span>
       </p>
     </section>`
   );
 };
 export default class CreateInfoTripTemplate {
-  constructor() {
+  constructor(trip) {
+    this.trip = trip;
     this._element = null;
   }
   getTemplate() {
-    return getTemplateInfoRoute();
+    return getTemplateInfoRoute(this.trip);
   }
   getElement() {
     if (!this._element) {
