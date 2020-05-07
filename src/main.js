@@ -62,7 +62,7 @@ render(tripMenu, templateMenu.getElement());
 const filtersComponent = new CreateFilterTemplate(generateFilters());
 render(tripMenu, filtersComponent.getElement());
 // инфа в хедере
-const templateInfoRoute = new CreateInfoTripTemplate();
+const templateInfoRoute = new CreateInfoTripTemplate(arrTrip);
 const tripMainContainer = document.querySelector(`.trip-main`);
 render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
 const mainContent = document.querySelector(`.trip-events`);
