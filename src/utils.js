@@ -48,9 +48,19 @@ export const render = (container, element, place = Position.BEFOREEND) => {
       break;
   }
 };
+export const replace = (newComponent, oldComponent) => {
+  const parentElement = oldComponent.getElement().parentElement;
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
 
-export const unrender = (element) => {
-  if (element) {
-    element.remove();
+  const isExistElements = !!(parentElement && newElement && oldElement);
+
+  if (isExistElements && parentElement.contains(oldElement)) {
+    parentElement.replaceChild(newElement, oldElement);
   }
+};
+
+export const unrender = (component) => {
+  component.getElement().remove();
+  component.removeElement();
 };

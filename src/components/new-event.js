@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import {default as AbstractComponent} from "./abstract";
 
 const getTemplateFormCreate = (trip, offers, tripData) => {
   // транспорт
@@ -118,24 +118,14 @@ const getTemplateFormCreate = (trip, offers, tripData) => {
           </form>`
   );
 };
-export default class CreateFormNewEventTemplate {
+export default class CreateFormNewEventTemplate extends AbstractComponent {
   constructor(trip, offers, tripData) {
+    super();
     this.filters = trip;
     this.offers = offers;
     this.tripData = tripData;
-
-    this._element = null;
   }
   getTemplate() {
     return getTemplateFormCreate(this.filters, this.offers, this.tripData);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,4 +1,5 @@
-import {createElement, MONTH_NAMES} from "../utils";
+import {MONTH_NAMES} from "../utils";
+import {default as AbstractComponent} from './abstract';
 
 const getTemplateTripDays = (trips) => {
 
@@ -20,11 +21,15 @@ const getTemplateTripDays = (trips) => {
     }
   };
   const getTotalDay = () => {
-    const countDay = Math.floor((trips[trips.length - 1].tripDate - trips[0].tripDate) / TIME_VALUES.millisecond / TIME_VALUES.second / TIME_VALUES.minutes / TIME_VALUES.hour) + 2;
+    //console.log(Date.parse((trips[trips.length - 1].tripDate)))
+
+    const countDay = (Date.parse((trips[trips.length - 1].tripDate)) - Date.parse((trips[0].tripDate))) / TIME_VALUES.millisecond / TIME_VALUES.second / TIME_VALUES.minutes / TIME_VALUES.hour;
     return countDay;
   };
+  const b =  getTotalDay()
+  console.log(b)
   const arrDay = [];
-  for (let i = 0; i < getTotalDay(); i++) {
+  for (let i = 0; i < b; i++) {
     arrDay.push(i + 1);
   }
   const templateDay = (it) => {
@@ -50,21 +55,12 @@ const getTemplateTripDays = (trips) => {
     `<ul class="trip-days">${dayMarkup}</ul>`
   );
 };
-export default class CreateTripDays {
+export default class CreateTripDays extends AbstractComponent {
   constructor(trip) {
+    super();
     this.trip = trip;
-    this._element = null;
   }
   getTemplate() {
     return getTemplateTripDays(this.trip);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

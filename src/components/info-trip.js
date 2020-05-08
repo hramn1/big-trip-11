@@ -1,4 +1,5 @@
-import {createElement, MONTH_NAMES} from "../utils";
+import {MONTH_NAMES} from "../utils";
+import {default as AbstractComponent} from "./abstract";
 
 const getTemplateInfoRoute = (trips) => {
   const getTotalPrice = () => {
@@ -49,21 +50,12 @@ const getTemplateInfoRoute = (trips) => {
     </section>`
   );
 };
-export default class CreateInfoTripTemplate {
+export default class CreateInfoTripTemplate extends AbstractComponent {
   constructor(trip) {
+    super();
     this.trip = trip;
-    this._element = null;
   }
   getTemplate() {
     return getTemplateInfoRoute(this.trip);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
