@@ -1,20 +1,7 @@
-import {createElement} from "../utils";
+import {createElement, MONTH_NAMES} from "../utils";
 
 const getTemplateTripDays = (trips) => {
-  const MONTH_NAMES = [
-    `JAN`,
-    `FEB`,
-    `MAR`,
-    `APR`,
-    `MAY`,
-    `JUN`,
-    `JUL`,
-    `AUG`,
-    `SEP`,
-    `OCT`,
-    `NOV`,
-    `DEC`
-  ];
+
   const TIME_VALUES = {
     millisecond: 1000,
     hour: 24,
@@ -33,7 +20,7 @@ const getTemplateTripDays = (trips) => {
     }
   };
   const getTotalDay = () => {
-    const countDay = Math.round((trips[trips.length - 1].tripDate - trips[0].tripDate) / TIME_VALUES.millisecond / TIME_VALUES.second / TIME_VALUES.minutes / TIME_VALUES.hour) + 1;
+    const countDay = Math.floor((trips[trips.length - 1].tripDate - trips[0].tripDate) / TIME_VALUES.millisecond / TIME_VALUES.second / TIME_VALUES.minutes / TIME_VALUES.hour) + 2;
     return countDay;
   };
   const arrDay = [];

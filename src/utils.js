@@ -4,6 +4,20 @@ export const Position = {
   BEFOREEND: `beforeend`,
   AFTER: `after`
 };
+export const MONTH_NAMES = [
+  `JAN`,
+  `FEB`,
+  `MAR`,
+  `APR`,
+  `MAY`,
+  `JUN`,
+  `JUL`,
+  `AUG`,
+  `SEP`,
+  `OCT`,
+  `NOV`,
+  `DEC`
+];
 export const addZero = (number) => number.toString().padStart(2, `0`);
 export const generatorRandom = {
   generateRandomNumber(min, max) {
