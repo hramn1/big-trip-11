@@ -33,28 +33,27 @@ export default class BoardController {
     }
     const sortTemplate = new CreateSort(generateSort());
     sortTemplate.sortEvent = (evt) => {
-      if(evt.target.id === `sort-event`){
-        unrender(sortContainer)
-        unrender(templatePointRouteList)
+      if (evt.target.id === `sort-event`) {
+        unrender(sortContainer);
+        unrender(templatePointRouteList);
         rendertemplatePointRouteList(this.container, this.trips, templatePointRouteList);
         return;
-      } else if (evt.target.id === `sort-price`){
+      } else if (evt.target.id === `sort-price`) {
         this.trips = [...this.trips].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.price) - parseFloat(tripsSecond.price)));
       } else {
         this.trips = [...this.trips].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.timeTrip) - parseFloat(tripsSecond.timeTrip)));
 
       }
-      sortTemplate.unrenderDay()
-      unrender(templatePointRouteList)
-      unrender(sortContainer)
+      sortTemplate.unrenderDay();
+      unrender(templatePointRouteList);
+      unrender(sortContainer);
       render(this.container, sortContainer.getElement());
       const routeList = document.querySelector(`.trip-days__item .trip-events__item `);
-      for (let it of this.trips){
+      for (let it of this.trips) {
         const eventController2 = new TripController(routeList, it);
         eventController2.init();
       }
-
-    }
+    };
     render(this.container, sortTemplate.getElement());
 
     // const templateFormCreate = new CreateFormNewEventTemplate(arrTrip, offers, tripData);
