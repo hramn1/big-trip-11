@@ -33,4 +33,10 @@ export default class CreateSort extends AbstractComponent {
   getTemplate() {
     return getTemplateSort(this.sort);
   }
+  sortEvent (evt) {
+    console.log(evt)
+  }
+  bind() {
+    this._element.addEventListener('click', this.sortEvent)
+  }
 }
