@@ -17,7 +17,7 @@ const getTemplateFilters = (filters) => {
     </form>`
   );
 };
-export default class CreateFilterTemplate extends AbstractComponent{
+export default class CreateFilterTemplate extends AbstractComponent {
   constructor(filters) {
     super();
     this.filters = filters;

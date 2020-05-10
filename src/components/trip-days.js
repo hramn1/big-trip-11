@@ -3,12 +3,6 @@ import {default as AbstractComponent} from './abstract';
 
 const getTemplateTripDays = (trips) => {
 
-  const TIME_VALUES = {
-    millisecond: 1000,
-    hour: 24,
-    second: 60,
-    minutes: 60,
-  };
   let dayOfMouth = trips[0].tripDate.getDate() - 1;
   let countOfMouth = trips[0].tripDate.getMonth();
   const limitDayMouth = () => {
@@ -20,16 +14,21 @@ const getTemplateTripDays = (trips) => {
       return 30;
     }
   };
+  const mounthMultiplier = () => {
+    if (trips[0].tripDate.getMonth() === trips[trips.length - 1].tripDate.getMonth()) {
+      return 0;
+    } else if (trips[trips.length - 1].tripDate.getMonth() - trips[0].tripDate.getMonth() === 1) {
+      return limitDayMouth(trips[0].tripDate.getMonth());
+    }
+    return 0;
+  };
   const getTotalDay = () => {
-    //console.log(Date.parse((trips[trips.length - 1].tripDate)))
-
-    const countDay = (Date.parse((trips[trips.length - 1].tripDate)) - Date.parse((trips[0].tripDate))) / TIME_VALUES.millisecond / TIME_VALUES.second / TIME_VALUES.minutes / TIME_VALUES.hour;
+    const countDay = trips[trips.length - 1].tripDate.getDate() + mounthMultiplier() - trips[0].tripDate.getDate();
     return countDay;
   };
-  const b =  getTotalDay()
-  console.log(b)
+  const totalDay = getTotalDay();
   const arrDay = [];
-  for (let i = 0; i < b; i++) {
+  for (let i = 0; i <= totalDay; i++) {
     arrDay.push(i + 1);
   }
   const templateDay = (it) => {
