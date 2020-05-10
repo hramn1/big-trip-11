@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import {default as AbstractComponent} from "./abstract";
 
 const editEventMarkup = (trip, tripData, offers) => {
   const typeTransport = (it) => {
@@ -113,25 +113,15 @@ const editEventMarkup = (trip, tripData, offers) => {
                 </form>`
   );
 };
-export default class CreateEditEvent {
+export default class CreateEditEvent extends AbstractComponent {
   constructor(trip, tripData, offers) {
+    super();
     this.trip = trip;
     this.tripData = tripData;
     this.offers = offers;
-    this._element = null;
   }
   getTemplate() {
     return editEventMarkup(this.trip, this.tripData, this.offers);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    this.bind();
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
   openEvent() {}
   bind() {

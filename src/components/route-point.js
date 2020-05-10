@@ -1,4 +1,5 @@
-import {createElement, addZero} from "../utils";
+import {addZero} from "../utils";
+import {default as AbstractComponent} from "./abstract";
 
 const getTemplatePointRoute = (trip) => {
   const offerTripPoint = (item) => {
@@ -55,34 +56,18 @@ const getTemplatePointRoute = (trip) => {
       </button>
     </div>`
   );
-  // return (
-  //   `<li class="trip-events__item">
-  //     ${typeTripPoint}
-  //   </li>`
-  // );
 };
-export default class CreatePointRoute {
+export default class CreatePointRoute extends AbstractComponent {
   constructor(trip) {
+    super();
     this.trip = trip;
-    this._element = null;
   }
   getTemplate() {
     return getTemplatePointRoute(this.trip);
   }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-      this.bind();
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
-  }
   editForm() {}
   bind() {
-    const element = this._element;
-    element.querySelector(`.event__rollup-btn`).addEventListener(`click`, (evt) => {
+    this._element.querySelector(`.event__rollup-btn`).addEventListener(`click`, (evt) => {
       this.editForm(evt);
     });
   }

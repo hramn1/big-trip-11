@@ -1,26 +1,8 @@
-import {createElement} from "../utils";
+import {MONTH_NAMES} from "../utils";
+import {default as AbstractComponent} from './abstract';
 
 const getTemplateTripDays = (trips) => {
-  const MONTH_NAMES = [
-    `JAN`,
-    `FEB`,
-    `MAR`,
-    `APR`,
-    `MAY`,
-    `JUN`,
-    `JUL`,
-    `AUG`,
-    `SEP`,
-    `OCT`,
-    `NOV`,
-    `DEC`
-  ];
-  const TIME_VALUES = {
-    millisecond: 1000,
-    hour: 24,
-    second: 60,
-    minutes: 60,
-  };
+
   let dayOfMouth = trips[0].tripDate.getDate() - 1;
   let countOfMouth = trips[0].tripDate.getMonth();
   const limitDayMouth = () => {
@@ -32,12 +14,21 @@ const getTemplateTripDays = (trips) => {
       return 30;
     }
   };
+  const mounthMultiplier = () => {
+    if (trips[0].tripDate.getMonth() === trips[trips.length - 1].tripDate.getMonth()) {
+      return 0;
+    } else if (trips[trips.length - 1].tripDate.getMonth() - trips[0].tripDate.getMonth() === 1) {
+      return limitDayMouth(trips[0].tripDate.getMonth());
+    }
+    return 0;
+  };
   const getTotalDay = () => {
-    const countDay = Math.round((trips[trips.length - 1].tripDate - trips[0].tripDate) / TIME_VALUES.millisecond / TIME_VALUES.second / TIME_VALUES.minutes / TIME_VALUES.hour) + 1;
+    const countDay = trips[trips.length - 1].tripDate.getDate() + mounthMultiplier() - trips[0].tripDate.getDate();
     return countDay;
   };
+  const totalDay = getTotalDay();
   const arrDay = [];
-  for (let i = 0; i < getTotalDay(); i++) {
+  for (let i = 0; i <= totalDay; i++) {
     arrDay.push(i + 1);
   }
   const templateDay = (it) => {
@@ -63,21 +54,12 @@ const getTemplateTripDays = (trips) => {
     `<ul class="trip-days">${dayMarkup}</ul>`
   );
 };
-export default class CreateTripDays {
+export default class CreateTripDays extends AbstractComponent {
   constructor(trip) {
+    super();
     this.trip = trip;
-    this._element = null;
   }
   getTemplate() {
     return getTemplateTripDays(this.trip);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

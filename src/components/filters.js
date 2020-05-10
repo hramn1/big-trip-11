@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import {default as AbstractComponent} from "./abstract";
 const getTemplateFilters = (filters) => {
   const createFilter = (filter) => {
     const isChecked = (filter.currentFilter) ? ` checked` : ``;
@@ -17,21 +17,12 @@ const getTemplateFilters = (filters) => {
     </form>`
   );
 };
-export default class CreateFilterTemplate {
+export default class CreateFilterTemplate extends AbstractComponent {
   constructor(filters) {
+    super();
     this.filters = filters;
-    this._element = null;
   }
   getTemplate() {
     return getTemplateFilters(this.filters);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

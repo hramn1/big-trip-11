@@ -3,7 +3,7 @@ export const tripData = {
   "id": [1, 100],
   "type": [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`],
   "finalDestination": {
-    "city": [`Hell`, `Nifelheim`, `Moscow`],
+    "city": [`Hell`, `Nifelheim`, `Moscow`, `Heaven`],
     "picture": `http://picsum.photos/248/152?r=${Math.random()}`,
     "description": `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra.
@@ -131,7 +131,7 @@ export const generateSort = () => {
     },
     {
       name: `time`,
-      currentFilter: false
+      currentFilter: true
     },
     {
       name: `price`,

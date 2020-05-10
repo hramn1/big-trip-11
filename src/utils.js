@@ -1,9 +1,23 @@
-export const TOTALTRIP = 0;
+export const TOTALTRIP = 15;
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTER: `after`
 };
+export const MONTH_NAMES = [
+  `JAN`,
+  `FEB`,
+  `MAR`,
+  `APR`,
+  `MAY`,
+  `JUN`,
+  `JUL`,
+  `AUG`,
+  `SEP`,
+  `OCT`,
+  `NOV`,
+  `DEC`
+];
 export const addZero = (number) => number.toString().padStart(2, `0`);
 export const generatorRandom = {
   generateRandomNumber(min, max) {
@@ -34,9 +48,19 @@ export const render = (container, element, place = Position.BEFOREEND) => {
       break;
   }
 };
+export const replace = (newComponent, oldComponent) => {
+  const parentElement = oldComponent.getElement().parentElement;
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
 
-export const unrender = (element) => {
-  if (element) {
-    element.remove();
+  const isExistElements = !!(parentElement && newElement && oldElement);
+
+  if (isExistElements && parentElement.contains(oldElement)) {
+    parentElement.replaceChild(newElement, oldElement);
   }
+};
+
+export const unrender = (component) => {
+  component.getElement().remove();
+  component.removeElement();
 };
