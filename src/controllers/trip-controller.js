@@ -1,22 +1,24 @@
 import {default as CreatePointRoute} from '../components/route-point';
 import {default as CreateEditEven} from '../components/edit-event';
 import {tripData, offers} from '../data';
-import {render} from "../utils";
+import {render, replace} from "../utils";
 
 export default class TripController {
-  constructor(container, trip) {
+  constructor(container, onDataChange) {
     this.container = container;
-    this.trips = trip;
+    this._onDataChange = onDataChange;
   }
-  init() {
+  init(trip) {
+    this.trips = trip;
     const tripEvent = new CreatePointRoute(this.trips);
     const editEvent = new CreateEditEven(this.trips, tripData, offers);
+
     tripEvent.editForm = () => {
-      this.container.replaceChild(editEvent.getElement(), tripEvent.getElement());
+      replace(editEvent, tripEvent);
       document.addEventListener(`keydown`, onEscKeyDown);
     };
     editEvent.openEvent = () => {
-      this.container.replaceChild(tripEvent.getElement(), editEvent.getElement());
+      replace(tripEvent, editEvent);
     };
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
@@ -26,5 +28,10 @@ export default class TripController {
       }
     };
     render(this.container, tripEvent.getElement());
+    editEvent.favoriteEvent = () => {
+      this._onDataChange(this.trips, Object.assign({}, this.trips, {
+        favorites: !this.trips.favorites,
+      }));
+    };
   }
 }

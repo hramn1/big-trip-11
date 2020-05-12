@@ -22,4 +22,4 @@ const templateInfoRoute = new CreateInfoTripTemplate(arrTrip);
 const tripMainContainer = document.querySelector(`.trip-main`);
 render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
 
-boardController.init();
+boardController.init(arrTrip);
