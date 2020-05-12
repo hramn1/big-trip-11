@@ -7,28 +7,35 @@ export default class TripController {
   constructor(container, onDataChange) {
     this.container = container;
     this._onDataChange = onDataChange;
+
   }
   init(trip) {
     this.trips = trip;
-    const tripEvent = new CreatePointRoute(this.trips);
-    const editEvent = new CreateEditEven(this.trips, tripData, offers);
-
-    tripEvent.editForm = () => {
-      replace(editEvent, tripEvent);
+    const oldETrip = this.tripEvent;
+    const oldEditEvent = this.editEvent;
+    this.tripEvent = new CreatePointRoute(this.trips);
+    this.editEvent = new CreateEditEven(this.trips, tripData, offers);
+    if (oldETrip && oldEditEvent) {
+      replace(this.tripEvent, oldETrip);
+      replace(this.editEvent, oldEditEvent);
+    } else {
+      render(this.container, this.tripEvent.getElement());
+    }
+    this.tripEvent.editForm = () => {
+      replace(this.editEvent, this.tripEvent);
       document.addEventListener(`keydown`, onEscKeyDown);
     };
-    editEvent.openEvent = () => {
-      replace(tripEvent, editEvent);
+    this.editEvent.openEvent = () => {
+      replace(this.tripEvent, this.editEvent);
     };
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
       if (isEscKey) {
-        editEvent.openEvent();
+        this.editEvent.openEvent();
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
-    render(this.container, tripEvent.getElement());
-    editEvent.favoriteEvent = () => {
+    this.editEvent.favoriteEvent = () => {
       this._onDataChange(this.trips, Object.assign({}, this.trips, {
         favorites: !this.trips.favorites,
       }));
