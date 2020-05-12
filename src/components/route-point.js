@@ -1,5 +1,5 @@
 import {addZero} from "../utils";
-import {default as AbstractComponent} from "./abstract";
+import {default as AbstractSmartComponent} from "./abstract-smart";
 
 const getTemplatePointRoute = (trip) => {
   const offerTripPoint = (item) => {
@@ -57,7 +57,7 @@ const getTemplatePointRoute = (trip) => {
     </div>`
   );
 };
-export default class CreatePointRoute extends AbstractComponent {
+export default class CreatePointRoute extends AbstractSmartComponent {
   constructor(trip) {
     super();
     this.trip = trip;

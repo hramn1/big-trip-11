@@ -102,6 +102,7 @@ export const generateTripData = () => {
     "picture": `http://picsum.photos/248/152?r=${Math.random()}`,
     intervalTrip,
     timeTrip,
+    "favorites": Boolean(Math.round(Math.random())),
     "tripDate": getNewDateTrip(),
     "tripDateEnd": getEndDateTrip(),
     "offers": offers.slice(Math.round(generatorRandom.generateRandomNumber(0, 3)), Math.round(generatorRandom.generateRandomNumber(3, 7)))
