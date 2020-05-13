@@ -123,17 +123,26 @@ export default class CreateEditEvent extends AbstractSmartComponent {
   }
   getTemplate() {
     return editEventMarkup(this.trip, this.tripData, this.offers);
+
   }
 
   recoveryListeners() {
-    this.openEvent(this.openEvent);
-    this.favoriteEvent(this.favoriteEvent);
+    // this.openEvent(this.openEvent);
+    // this.favoriteEvent(this.favoriteEvent);
     // this.setFavoriteCheckboxClickHandler(this._favoriteCheckboxClickHandler);
     // this.setEditButtonClickHandler(this._editButtonClickHandler);
     //
     // this._subscribeOnEvents();
   }
+  rerender() {
+    super.rerender();
+  }
 
+  reset(oldData) {
+    const trip = this.trip;
+    trip.favorites = oldData.favorites;
+    this.rerender();
+  }
   openEvent() {}
   favoriteEvent() {}
   bind() {
