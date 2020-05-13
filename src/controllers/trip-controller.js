@@ -10,7 +10,7 @@ const Mode = {
 
 export default class TripController {
   constructor(trips, container, onDataChange, onViewChange) {
-    this.trips = trips;
+    this.tripsOld = trips;
     this.container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
@@ -50,7 +50,7 @@ export default class TripController {
   }
   _replaceEventToEdit() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    this.editEvent.reset();
+    this.editEvent.reset(this.tripsOld);
     replace(this.tripEvent, this.editEvent);
     this._mode = Mode.DEFAULT;
 

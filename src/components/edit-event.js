@@ -1,7 +1,7 @@
 import {default as AbstractSmartComponent} from "./abstract-smart";
 
-const editEventMarkup = (trip, tripData, offers, isFavorites) => {
-  const isFavorite = (isFavorites) ? ` checked` : ``;
+const editEventMarkup = (trip, tripData, offers) => {
+  const isFavorite = (trip.favorites) ? ` checked` : ``;
   const typeTransport = (it) => {
     return (
       `<div class="event__type-item">
@@ -120,11 +120,9 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     this.trip = trip;
     this.tripData = tripData;
     this.offers = offers;
-    this.favor = !!trip.favorites;
-
   }
   getTemplate() {
-    return editEventMarkup(this.trip, this.tripData, this.offers, this.favor);
+    return editEventMarkup(this.trip, this.tripData, this.offers);
 
   }
 
@@ -140,9 +138,9 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     super.rerender();
   }
 
-  reset() {
+  reset(oldData) {
     const trip = this.trip;
-    this.favor = !!trip.favorites;
+    trip.favorites = oldData.favorites;
     this.rerender();
   }
   openEvent() {}
