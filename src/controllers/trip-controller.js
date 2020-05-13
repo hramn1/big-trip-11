@@ -49,9 +49,8 @@ export default class TripController {
     }));
   }
   _replaceEventToEdit() {
-    const oldDataFavorite = !this.trips.favorites;
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    this.editEvent.reset(oldDataFavorite);
+    this.editEvent.reset();
     replace(this.tripEvent, this.editEvent);
     this._mode = Mode.DEFAULT;
 
