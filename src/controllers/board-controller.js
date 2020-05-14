@@ -76,7 +76,8 @@ export default class BoardController {
       unrender(sortContainer);
       render(this.container, sortContainer.getElement());
       for (let it of this.trips) {
-        const eventControllerSort = new TripController(it, sortContainer.getElement(), this._onDataChange, this._onViewChange);
+        const routeList = document.querySelector(`.trip-days__item .trip-events__item `);
+        const eventControllerSort = new TripController(it, routeList, this._onDataChange, this._onViewChange);
         eventControllerSort.init(it);
         this._showedTripControllers = this._showedTripControllers.concat(eventControllerSort);
       }

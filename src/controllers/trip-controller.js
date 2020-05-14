@@ -60,6 +60,7 @@ export default class TripController {
     replace(this.editEvent, this.tripEvent);
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.EDIT;
+    this.editEvent._applyFlatpickr()
   }
   _onEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
