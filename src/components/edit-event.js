@@ -1,12 +1,15 @@
 import {default as AbstractSmartComponent} from "./abstract-smart";
+import flatpickr from "flatpickr";
+import moment from "moment";
+import "flatpickr/dist/flatpickr.min.css";
 
 const editEventMarkup = (trip, tripData, offers) => {
   const isFavorite = (trip.favorites) ? ` checked` : ``;
   const typeTransport = (it) => {
     return (
       `<div class="event__type-item">
-        <input id="event-type-${it.toLowerCase()}-${it.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it.type}">
-        <label class="event__type-label  event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-${it.id}">${it}</label>
+        <input id="event-type-${it.toLowerCase()}-${trip.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it.type}">
+        <label class="event__type-label  event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-${trip.id}">${it}</label>
       </div>`
     );
   };
@@ -52,7 +55,6 @@ const editEventMarkup = (trip, tripData, offers) => {
 
                         <fieldset class="event__type-group">
                           <legend class="visually-hidden">Activity</legend>
-
                           ${typeActivityMarkup}
                         </fieldset>
                       </div>
@@ -67,15 +69,15 @@ const editEventMarkup = (trip, tripData, offers) => {
                       </datalist>
                     </div>
                     <div class="event__field-group  event__field-group--time">
-                      <label class="visually-hidden" for="event-start-time-1">
+                      <label class="visually-hidden" for="event-start-time-${trip.id}">
                         From
                       </label>
-                      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${trip.tripDate}">
+                      <input class="event__input  event__input--time" id="event-start-time-${trip.id}" type="text" name="event-start-time" value="${trip.tripDate}">
                       &mdash;
-                      <label class="visually-hidden" for="event-end-time-1">
+                      <label class="visually-hidden" for="event-end-time-${trip.id}">
                         To
                       </label>
-                      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${trip.tripDateEnd}">
+                      <input class="event__input  event__input--time" id="event-end-time-${trip.id}" type="text" name="event-end-time" value="${trip.tripDateEnd}">
                     </div>
 
                     <div class="event__field-group  event__field-group--price">
@@ -117,14 +119,18 @@ const editEventMarkup = (trip, tripData, offers) => {
 export default class CreateEditEvent extends AbstractSmartComponent {
   constructor(trip, tripData, offers) {
     super();
-    this.trip = trip;
+    this.trip= trip;
     this.tripData = tripData;
     this.offers = offers;
+    this._flatpickrStart = null;
+    this._applyFlatpickr();
+
   }
   getTemplate() {
     return editEventMarkup(this.trip, this.tripData, this.offers);
 
   }
+
 
   recoveryListeners() {
     // this.openEvent(this.openEvent);
@@ -132,19 +138,48 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     // this.setFavoriteCheckboxClickHandler(this._favoriteCheckboxClickHandler);
     // this.setEditButtonClickHandler(this._editButtonClickHandler);
     //
-    // this._subscribeOnEvents();
+    this._subscribeOnEvents();
   }
   rerender() {
     super.rerender();
+    this._applyFlatpickr();
   }
 
   reset(oldData) {
-    const trip = this.trip;
-    trip.favorites = oldData.favorites;
+    this.trip = oldData;
+    //trip.favorites = oldData.favorites;
     this.rerender();
   }
   openEvent() {}
   favoriteEvent() {}
+  _applyFlatpickr() {
+    if (this._flatpickrStart) {
+      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
+      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
+      this._flatpickrStart.destroy()
+      this._flatpickrStart = null
+      }
+
+
+
+        const dateElementStaty = this.getElement().querySelector(`#event-start-time-${this.trip.id}`);
+        this._flatpickrStart = flatpickr(dateElementStaty, {
+          altInput: true,
+          allowInput: true,
+          defaultDate: 'today',
+        })
+
+  }
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, () => {
+        this.rerender();
+      });
+  }
+
+
   bind() {
     this._element.querySelector(`.event__rollup-btn`).addEventListener(`click`, (evt) => {
       this.openEvent(evt);
