@@ -22,6 +22,7 @@ export default class TripController {
   init(trip) {
     this.trips = trip;
     const oldETrip = this.tripEvent;
+    console.log(oldETrip)
     const oldEditEvent = this.editEvent;
     this.tripEvent = new CreatePointRoute(this.trips);
     this.editEvent = new CreateEditEven(this.trips, tripData, offers);

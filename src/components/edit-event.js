@@ -1,6 +1,5 @@
 import {default as AbstractSmartComponent} from "./abstract-smart";
 import flatpickr from "flatpickr";
-import moment from "moment";
 import "flatpickr/dist/flatpickr.min.css";
 
 const editEventMarkup = (trip, tripData, offers) => {
@@ -119,25 +118,20 @@ const editEventMarkup = (trip, tripData, offers) => {
 export default class CreateEditEvent extends AbstractSmartComponent {
   constructor(trip, tripData, offers) {
     super();
-    this.trip= trip;
+    this.trip = trip;
     this.tripData = tripData;
     this.offers = offers;
     this._flatpickrStart = null;
+    this._flatpickrEnd = null;
     this._applyFlatpickr();
 
   }
   getTemplate() {
     return editEventMarkup(this.trip, this.tripData, this.offers);
-
   }
 
 
   recoveryListeners() {
-    // this.openEvent(this.openEvent);
-    // this.favoriteEvent(this.favoriteEvent);
-    // this.setFavoriteCheckboxClickHandler(this._favoriteCheckboxClickHandler);
-    // this.setEditButtonClickHandler(this._editButtonClickHandler);
-    //
     this._subscribeOnEvents();
   }
   rerender() {
@@ -147,28 +141,33 @@ export default class CreateEditEvent extends AbstractSmartComponent {
 
   reset(oldData) {
     this.trip = oldData;
-    //trip.favorites = oldData.favorites;
     this.rerender();
   }
   openEvent() {}
   favoriteEvent() {}
   _applyFlatpickr() {
-    if (this._flatpickrStart) {
+    if (this._flatpickrStart || this._flatpickrEnd) {
       // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
       // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
-      this._flatpickrStart.destroy()
-      this._flatpickrStart = null
-      }
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+    }
 
 
-
-        const dateElementStaty = this.getElement().querySelector(`#event-start-time-${this.trip.id}`);
-        this._flatpickrStart = flatpickr(dateElementStaty, {
-          altInput: true,
-          allowInput: true,
-          defaultDate: 'today',
-        })
-
+    const dateElementStaty = this.getElement().querySelector(`#event-start-time-${this.trip.id}`);
+    this._flatpickrStart = flatpickr(dateElementStaty, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: `today`,
+    });
+    const dateElementEnd = this.getElement().querySelector(`#event-end-time-${this.trip.id}`);
+    this._flatpickrEnd = flatpickr(dateElementEnd, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: `today`,
+    });
   }
   _subscribeOnEvents() {
     const element = this.getElement();
