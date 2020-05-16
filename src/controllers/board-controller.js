@@ -104,6 +104,12 @@ export default class BoardController {
   }
 
   _onDataChange(oldData, newData) {
+    if(newData === null){
+      this._pointModel.removePoint(oldData.id);
+      this._updatePoints();
+      return;
+    }
+
     const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
     this._pointModel.updatePoint(oldData.id, newData);
     // const index = trips.findIndex((it) => it === oldData);

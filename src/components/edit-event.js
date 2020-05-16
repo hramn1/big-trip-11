@@ -7,7 +7,7 @@ const editEventMarkup = (trip, tripData, offers) => {
   const typeTransport = (it) => {
     return (
       `<div class="event__type-item">
-        <input id="event-type-${it.toLowerCase()}-${trip.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it.type}">
+        <input id="event-type-${it.toLowerCase()}-${trip.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
         <label class="event__type-label  event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-${trip.id}">${it}</label>
       </div>`
     );
@@ -177,8 +177,8 @@ export default class CreateEditEvent extends AbstractSmartComponent {
         this.rerender();
       });
   }
-
-
+  changeTypeTransport() {}
+  deleteTrip() {}
   bind() {
     this._element.querySelector(`.event__rollup-btn`).addEventListener(`click`, (evt) => {
       this.openEvent(evt);
@@ -187,5 +187,11 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     this._element.querySelector(`.event__favorite-btn`).addEventListener(`click`, (evt) => {
       this.favoriteEvent(evt);
     });
+    this._element.querySelector(`.event__type-group`).addEventListener(`change`, (evt) => {
+      this.changeTypeTransport(evt);
+    });
+    this._element.querySelector(`.event__reset-btn`).addEventListener(`click`, (evt) => {
+      this.deleteTrip(evt);
+    })
   }
 }

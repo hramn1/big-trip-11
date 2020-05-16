@@ -36,6 +36,13 @@ export default class TripController {
     this.editEvent.favoriteEvent = () => {
       this._favoriteEvent();
     };
+    this.editEvent.changeTypeTransport = (evt) => {
+      this._changeTypeTransport(evt.target.value);
+    };
+    this.editEvent.deleteTrip = () => {
+      this._deleteTrip();
+
+    }
     if (oldETrip && oldEditEvent) {
       replace(this.tripEvent, oldETrip);
       replace(this.editEvent, oldEditEvent);
@@ -47,6 +54,14 @@ export default class TripController {
     this._onDataChange(this.trips, Object.assign({}, this.trips, {
       favorites: !this.trips.favorites,
     }));
+  }
+  _changeTypeTransport(transport) {
+    this._onDataChange(this.trips, Object.assign({}, this.trips, {
+      type: transport,
+    }));
+  }
+  _deleteTrip() {
+    this._onDataChange(this.trips, null);
   }
   _replaceEventToEdit() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
