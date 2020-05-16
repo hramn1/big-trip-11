@@ -1,4 +1,8 @@
 import {default as AbstractComponent} from "./abstract";
+const FILTER_ID_PREFIX = `filter-`;
+const getFilterNameById = (id) => {
+  return id.substring(FILTER_ID_PREFIX.length);
+};
 const getTemplateFilters = (filters) => {
   const createFilter = (filter) => {
     const isChecked = (filter.currentFilter) ? ` checked` : ``;
@@ -24,5 +28,12 @@ export default class CreateFilterTemplate extends AbstractComponent {
   }
   getTemplate() {
     return getTemplateFilters(this.filters);
+  }
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      const filterName = getFilterNameById(evt.target.id);
+      handler(filterName);
+    });
+
   }
 }

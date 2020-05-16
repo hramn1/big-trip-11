@@ -2,7 +2,6 @@ import {MONTH_NAMES} from "../utils";
 import {default as AbstractComponent} from './abstract';
 
 const getTemplateTripDays = (trips) => {
-
   let dayOfMouth = trips[0].tripDate.getDate() - 1;
   let countOfMouth = trips[0].tripDate.getMonth();
   const limitDayMouth = () => {
@@ -44,8 +43,8 @@ const getTemplateTripDays = (trips) => {
           <time class="day__date" datetime="${MONTH_NAMES[countOfMouth]} ${dayOfMouth}">${MONTH_NAMES[countOfMouth]} ${dayOfMouth}</time>
         </div>
         <ul class="trip-events__list">
-        <li class="trip-events__item" data-day="${countOfMouth} ${dayOfMouth}"></li>
-</ul>
+            <li class="trip-events__item" data-day="${countOfMouth} ${dayOfMouth}"></li>
+        </ul>
       </li>`
     );
   };

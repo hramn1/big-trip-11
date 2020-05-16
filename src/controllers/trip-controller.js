@@ -1,7 +1,7 @@
 import {default as CreatePointRoute} from '../components/route-point';
 import {default as CreateEditEven} from '../components/edit-event';
 import {tripData, offers} from '../data';
-import {render, replace} from "../utils";
+import {render, replace, unrender} from "../utils";
 
 const Mode = {
   DEFAULT: `default`,
@@ -60,6 +60,7 @@ export default class TripController {
     replace(this.editEvent, this.tripEvent);
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.EDIT;
+    this.editEvent._applyFlatpickr();
   }
   _onEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
@@ -67,6 +68,11 @@ export default class TripController {
       this._replaceEventToEdit();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
+  }
+  destroy() {
+    unrender(this.tripEvent);
+    unrender(this.editEvent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {

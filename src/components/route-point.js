@@ -1,4 +1,4 @@
-import {addZero} from "../utils";
+import {addZero, getPreTitleCity} from "../utils";
 import {default as AbstractSmartComponent} from "./abstract-smart";
 
 const getTemplatePointRoute = (trip) => {
@@ -26,13 +26,16 @@ const getTemplatePointRoute = (trip) => {
 
     return `${intervalDays ? intervalDays + `D ` : `` }${intervalHours ? intervalHours + `H ` : ``}${intervalMinutes}M`;
   };
+  const getTripTypeWithPre = () => {
+    return `${trip.type} ${getPreTitleCity(trip.type)}`;
+  };
   return (
     `<div class="event">
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${trip.type.toLowerCase()}.png" alt="Event type icon">
       </div>
 
-      <h3 class="event__title">${trip.type} to ${trip.city}</h3>
+      <h3 class="event__title">${getTripTypeWithPre()} ${trip.city}</h3>
 
       <div class="event__schedule">
         <p class="event__time">
