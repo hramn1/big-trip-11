@@ -1,8 +1,8 @@
 import {default as CreateTemplateMenu} from './components/main-menu';
-import {default as CreateFilterTemplate} from './components/filters';
 import {default as CreateInfoTripTemplate} from './components/info-trip';
 import {default as BoardController} from './controllers/board-controller';
-import {generateTripData, generateFilters} from './data';
+import {default as FilterController} from './controllers/filter-controller';
+import {generateTripData} from './data';
 import {render, TOTALTRIP, Position} from "./utils";
 import {default as PointModel} from "./models/points";
 const arrTrip = [];
@@ -18,8 +18,8 @@ const tripMenu = document.querySelector(`.trip-main__trip-controls.trip-controls
 const templateMenu = new CreateTemplateMenu();
 render(tripMenu, templateMenu.getElement());
 // фильтры
-const filtersComponent = new CreateFilterTemplate(generateFilters());
-render(tripMenu, filtersComponent.getElement());
+const filterController = new FilterController(tripMenu, pointModel);
+filterController.render();
 // инфа в хедере
 const templateInfoRoute = new CreateInfoTripTemplate(arrTrip);
 const tripMainContainer = document.querySelector(`.trip-main`);

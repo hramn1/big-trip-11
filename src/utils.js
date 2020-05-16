@@ -18,6 +18,11 @@ export const MONTH_NAMES = [
   `NOV`,
   `DEC`
 ];
+export const FilterType = {
+  ALL: `Everything`,
+  FUTURE: `Future`,
+  PAST: `Past`,
+};
 export const addZero = (number) => number.toString().padStart(2, `0`);
 export const generatorRandom = {
   generateRandomNumber(min, max) {
@@ -63,4 +68,27 @@ export const replace = (newComponent, oldComponent) => {
 export const unrender = (component) => {
   component.getElement().remove();
   component.removeElement();
+};
+
+export const getPointsByFilter = (tripEvents, filterType) => {
+  tripEvents.slice().sort((a, b) => a.tripDate - b.tripDate);
+
+  switch (filterType) {
+    case FilterType.PAST:
+      return tripEvents.filter((tripEvent) => tripEvent.tripDateEnd < Date.now());
+    case FilterType.FUTURE:
+      return tripEvents.filter((tripEvent) => tripEvent.tripDate > Date.now());
+  }
+  return tripEvents;
+};
+
+export const getPointsOrdered = (tripEvents) => {
+  return tripEvents.slice().sort((a, b) => a.startTime - b.startTime);
+};
+export const getPreTitleCity = (point) => {
+  if (point === `Check-in` || point === `Sightseeing` || point === `Restaurant`) {
+    return `in`;
+  } else {
+    return `to`;
+  }
 };

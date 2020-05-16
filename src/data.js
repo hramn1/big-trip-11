@@ -12,7 +12,7 @@ export const tripData = {
       Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
   },
   "price": [5, 200],
-  "beginTrip": new Date(),
+  "beginTrip": new Date(`May 14, 2020 03:24:00`),
 };
 export const offers = [
   {

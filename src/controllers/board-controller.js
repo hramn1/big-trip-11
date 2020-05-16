@@ -5,6 +5,7 @@ import {default as CreateSortContainer} from "../components/sort-container";
 import {generateSort} from "../data";
 import {default as CreateTripDays} from "../components/trip-days";
 import {default as TripController} from "./trip-controller";
+import {default as NewEventController} from "./new-event-controller";
 
 const renderTemplatePointRouteList = (container, trips, templatePointRouteList, onDataChange, onViewChange) => {
   render(container, templatePointRouteList.getElement());
@@ -28,22 +29,24 @@ export default class BoardController {
     this._pointModel = pointModel;
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
-    this.templatePointRouteList = new CreateTripDays(this._pointModel.getPointsAll());
+    this.sortContainer = new CreateSortContainer();
     this._showedTripControllers = [];
+    this._pointModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   init() {
-    const trips = this._pointModel.getPointsAll();
-    const isAllEventArchived = trips.every((trip) => trip.isArhive);
-    if (isAllEventArchived) {
+    const trips = this._pointModel.getPoints();
+    this.templatePointRouteList = new CreateTripDays(this._pointModel.getPoints());
+    if (trips.length === 0) {
       render(this.container, new CreateNoEventTemplate().getElement());
       return;
     }
     this._onSortEvent(this.templatePointRouteList);
+    const newEventController = new NewEventController(this.container, trips);
+    newEventController.init();
 
-    // const templateFormCreate = new CreateFormNewEventTemplate(arrTrip, offers, tripData);
-    // render(container, templateFormCreate.getElement());
 
     const newEvent = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
     this._showedTripControllers = this._showedTripControllers.concat(newEvent);
@@ -54,15 +57,14 @@ export default class BoardController {
     this._showedTripControllers.forEach((controller) => controller.setDefaultView());
   }
 
-  _onSortEvent(templatePointRouteList) {
-    let trips = this._pointModel.getPointsAll()
-    const sortContainer = new CreateSortContainer();
-    const sortTemplate = new CreateSort(generateSort());
-    sortTemplate.sortEvent = (evt) => {
+  _onSortEvent() {
+    let trips = this._pointModel.getPointsAll();
+    this.sortTemplate = new CreateSort(generateSort());
+    this.sortTemplate.sortEvent = (evt) => {
       this._showedTripControllers = [];
       if (evt.target.id === `sort-event`) {
-        unrender(sortContainer);
-        unrender(templatePointRouteList);
+        unrender(this.sortContainer);
+        unrender(this.templatePointRouteList);
         const newEventSort = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
         this._showedTripControllers = this._showedTripControllers.concat(newEventSort);
         return;
@@ -73,10 +75,10 @@ export default class BoardController {
         trips = [...trips].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.timeTrip) - parseFloat(tripsSecond.timeTrip)));
         this._showedTripControllers = [...this._showedTripControllers].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.price) - parseFloat(tripsSecond.price)));
       }
-      sortTemplate.unrenderDay();
-      unrender(templatePointRouteList);
-      unrender(sortContainer);
-      render(this.container, sortContainer.getElement());
+      this.sortTemplate.unrenderDay();
+      unrender(this.templatePointRouteList);
+      unrender(this.sortContainer);
+      render(this.container, this.sortContainer.getElement());
       for (let it of trips) {
         const routeList = document.querySelector(`.trip-days__item .trip-events__item `);
         const eventControllerSort = new TripController(it, routeList, this._onDataChange, this._onViewChange);
@@ -84,20 +86,32 @@ export default class BoardController {
         this._showedTripControllers = this._showedTripControllers.concat(eventControllerSort);
       }
     };
-    render(this.container, sortTemplate.getElement());
+    render(this.container, this.sortTemplate.getElement());
+  }
+  _removePoints() {
+    this._showedTripControllers.forEach((pointController) => pointController.destroy());
+    this._showedTripControllers = [];
+  }
+  _updatePoints() {
+    this._removePoints();
+    unrender(this.sortTemplate);
+    unrender(this.templatePointRouteList);
+    this.init();
+  }
+  _onFilterChange() {
+    // this._setSortStateDefault();
+    this._updatePoints();
   }
 
   _onDataChange(oldData, newData) {
-    let trips = this._pointModel.getPointsAll()
     const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
-    this._pointModel.updatePoint(oldData.id, newData, pointController)
-    const index = trips.findIndex((it) => it === oldData);
-    if (index === -1) {
-      return;
-    }
-    trips = [].concat(trips.slice(0, index), newData, trips.slice(index + 1));
-    console.log(trips[index])
-    //pointController.init(trips[index]);
+    this._pointModel.updatePoint(oldData.id, newData);
+    // const index = trips.findIndex((it) => it === oldData);
+    // if (index === -1) {
+    //   return;
+    // }
+    // trips = [].concat(trips.slice(0, index), newData, trips.slice(index + 1));
+    // pointController.init(trips[index]);
 
     pointController.init(this._pointModel.getPoint());
   }
