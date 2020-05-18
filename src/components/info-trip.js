@@ -21,13 +21,24 @@ const getTemplateInfoRoute = (trips) => {
     }
     let cityArr = Array.from(city);
     if (cityArr.length > 3) {
-      cityArr[1] = `...`;
+      return `${cityArr[0]} — ... — ${cityArr[cityArr.length - 1]}`;
+    } else if (cityArr.length === 2) {
+      return `${cityArr[0]} — ${cityArr[cityArr.length - 1]}`;
+    } else if (cityArr.length === 1) {
+      return `${cityArr[0]}`;
+    } else if (cityArr.length === 0) {
+      return ``;
+    } else {
+      return `${cityArr[0]} — ${cityArr[1]} — ${cityArr[cityArr.length - 1]}`;
     }
-    return cityArr;
   };
+
   const getDateInfo = () => {
-    const startTripMounth = trips[0].tripDate.getMonth();
-    const startTripDay = trips[0].tripDate.getDate();
+    if (trips.length === 0) {
+      return ``;
+    }
+    const startTripMounth = trips[0].tripDate.getMonth() || 0;
+    const startTripDay = trips[0].tripDate.getDate() || 0;
     const endTripMounth = trips[trips.length - 1].tripDate.getMonth();
     const endTripDay = trips[trips.length - 1].tripDate.getDate();
     let infoMounth = MONTH_NAMES[endTripMounth];
@@ -39,7 +50,7 @@ const getTemplateInfoRoute = (trips) => {
   return (
     `<section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
-        <h1 class="trip-info__title">${getVisitedCities()[0]} &mdash; ${getVisitedCities()[1]} &mdash; ${getVisitedCities()[getVisitedCities().length - 1]}</h1>
+        <h1 class="trip-info__title">${getVisitedCities()}</h1>
 
         <p class="trip-info__dates">${getDateInfo()}</p>
       </div>
@@ -51,11 +62,11 @@ const getTemplateInfoRoute = (trips) => {
   );
 };
 export default class CreateInfoTripTemplate extends AbstractComponent {
-  constructor(trip) {
+  constructor(pointModel) {
     super();
-    this.trip = trip;
+    this.pointModel = pointModel;
   }
   getTemplate() {
-    return getTemplateInfoRoute(this.trip);
+    return getTemplateInfoRoute(this.pointModel.getPointsAll());
   }
 }

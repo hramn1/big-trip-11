@@ -1,4 +1,4 @@
-export const TOTALTRIP = 15;
+export const TOTALTRIP = 2;
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
@@ -90,5 +90,14 @@ export const getPreTitleCity = (point) => {
     return `in`;
   } else {
     return `to`;
+  }
+};
+export const limitDayMouth = (countOfMouth) => {
+  if (countOfMouth === 1) {
+    return 28;
+  } else if (countOfMouth % 2 === 0) {
+    return 31;
+  } else {
+    return 30;
   }
 };

@@ -3,7 +3,7 @@ import {default as CreateInfoTripTemplate} from './components/info-trip';
 import {default as BoardController} from './controllers/board-controller';
 import {default as FilterController} from './controllers/filter-controller';
 import {generateTripData} from './data';
-import {render, TOTALTRIP, Position} from "./utils";
+import {render, TOTALTRIP, Position, unrender} from "./utils";
 import {default as PointModel} from "./models/points";
 const arrTrip = [];
 for (let i = 0; i < TOTALTRIP; i++) {
@@ -21,8 +21,11 @@ render(tripMenu, templateMenu.getElement());
 const filterController = new FilterController(tripMenu, pointModel);
 filterController.render();
 // инфа в хедере
-const templateInfoRoute = new CreateInfoTripTemplate(arrTrip);
+const templateInfoRoute = new CreateInfoTripTemplate(pointModel);
 const tripMainContainer = document.querySelector(`.trip-main`);
 render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
-
+pointModel.setDataChangeHandler(() => {
+  unrender(templateInfoRoute);
+  render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
+});
 boardController.init();

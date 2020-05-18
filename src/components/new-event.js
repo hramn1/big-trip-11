@@ -73,7 +73,7 @@ const getTemplateFormCreate = () => {
               </div>
 
               <div class="event__field-group  event__field-group--destination">
-                <label class="event__label  event__type-output" for="event-destination-1">
+                <label class="event__label  event__type-output" for="event-destination-1" >
                   Flight to
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
@@ -185,5 +185,15 @@ export default class CreateFormNewEventTemplate extends AbstractComponent {
   }
   getTemplate() {
     return getTemplateFormCreate(this.trip);
+  }
+  getData() {
+    const formData = new FormData(this.getElement());
+    return formData;
+  }
+  saveTrip() {}
+  bind() {
+    this._element.querySelector(`.event__save-btn `).addEventListener(`click`, (evt) => {
+      this.saveTrip(evt, this.getData());
+    });
   }
 }
