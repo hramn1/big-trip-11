@@ -92,3 +92,12 @@ export const getPreTitleCity = (point) => {
     return `to`;
   }
 };
+export const limitDayMouth = (countOfMouth) => {
+  if (countOfMouth === 1) {
+    return 28;
+  } else if (countOfMouth % 2 === 0) {
+    return 31;
+  } else {
+    return 30;
+  }
+};

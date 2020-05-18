@@ -51,8 +51,6 @@ export default class TripController {
     this._onDataChange(this.trips, null);
   }
   _saveTrip(newObj) {
-    console.log(newObj)
-    debugger
     this._onDataChange(this.trips, Object.assign({}, this.trips, {
       favorites: newObj.tripFavor,
       type: newObj.transport,
