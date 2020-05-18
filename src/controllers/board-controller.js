@@ -2,10 +2,11 @@ import {render, unrender} from "../utils";
 import {default as CreateNoEventTemplate} from "../components/no-event";
 import {default as CreateSort} from "../components/sort";
 import {default as CreateSortContainer} from "../components/sort-container";
-import {generateSort} from "../data";
+import {generateSort, generateTripData} from "../data";
 import {default as CreateTripDays} from "../components/trip-days";
 import {default as TripController} from "./trip-controller";
 import {default as NewEventController} from "./new-event-controller";
+
 
 const renderTemplatePointRouteList = (container, trips, templatePointRouteList, onDataChange, onViewChange) => {
   render(container, templatePointRouteList.getElement());
@@ -30,8 +31,9 @@ export default class BoardController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
-
+    this.newEventController = null;
     this.sortContainer = new CreateSortContainer();
+    this.createNoEventTemplate = new CreateNoEventTemplate();
     this._showedTripControllers = [];
     this._pointModel.setFilterChangeHandler(this._onFilterChange);
   }
@@ -40,13 +42,17 @@ export default class BoardController {
     const trips = this._pointModel.getPoints();
     this.templatePointRouteList = new CreateTripDays(this._pointModel.getPoints());
     if (trips.length === 0) {
-      render(this.container, new CreateNoEventTemplate().getElement());
+      render(this.container, this.createNoEventTemplate.getElement());
       return;
+    } else {
+
+      unrender(this.createNoEventTemplate)
     }
     this._onSortEvent(this.templatePointRouteList);
-    const newEventController = new NewEventController(this.container, trips);
-    newEventController.init();
-
+if (this.newEventController === null) {
+  this.newEventController = new NewEventController(this.container, generateTripData(), this._onDataChange, this._onViewChange);
+  this.newEventController.bind()
+}
 
     const newEvent = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
     this._showedTripControllers = this._showedTripControllers.concat(newEvent);
@@ -103,22 +109,22 @@ export default class BoardController {
     this._updatePoints();
   }
 
-  _onDataChange(oldData, newData) {
+  _onDataChange(oldData, newData, save) {
     if(newData === null){
       this._pointModel.removePoint(oldData.id);
       this._updatePoints();
       return;
     }
+    else if (oldData === null){
+      this._pointModel.addPoint(newData);
+      this._updatePoints();
 
-    const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
-    this._pointModel.updatePoint(oldData.id, newData);
-    // const index = trips.findIndex((it) => it === oldData);
-    // if (index === -1) {
-    //   return;
-    // }
-    // trips = [].concat(trips.slice(0, index), newData, trips.slice(index + 1));
-    // pointController.init(trips[index]);
+    }
+    else {
+      const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
+      this._pointModel.updatePoint(oldData.id, newData);
+      pointController.init(newData);
 
-    pointController.init(this._pointModel.getPoint());
+    }
   }
 }

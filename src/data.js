@@ -112,7 +112,7 @@ export const generateFilters = () => {
   return [
     {
       name: `Everything`,
-      currentFilter: true
+      currentFilter: false
     },
     {
       name: `Future`,
@@ -132,7 +132,7 @@ export const generateSort = () => {
     },
     {
       name: `time`,
-      currentFilter: true
+      currentFilter: false
     },
     {
       name: `price`,

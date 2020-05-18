@@ -10,7 +10,6 @@ const Mode = {
 
 export default class TripController {
   constructor(trips, container, onDataChange, onViewChange) {
-    this.tripsOld = trips;
     this.container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
@@ -33,16 +32,14 @@ export default class TripController {
       this._replaceEventToEdit();
     };
 
-    this.editEvent.favoriteEvent = () => {
-      this._favoriteEvent();
-    };
-    this.editEvent.changeTypeTransport = (evt) => {
-      this._changeTypeTransport(evt.target.value);
-    };
+
     this.editEvent.deleteTrip = () => {
       this._deleteTrip();
-
-    }
+    };
+    this.editEvent.saveTrip = (evt, newObj) => {
+      evt.preventDefault()
+      this._saveTrip(newObj);
+    };
     if (oldETrip && oldEditEvent) {
       replace(this.tripEvent, oldETrip);
       replace(this.editEvent, oldEditEvent);
@@ -50,22 +47,21 @@ export default class TripController {
       render(this.container, this.tripEvent.getElement());
     }
   }
-  _favoriteEvent() {
-    this._onDataChange(this.trips, Object.assign({}, this.trips, {
-      favorites: !this.trips.favorites,
-    }));
-  }
-  _changeTypeTransport(transport) {
-    this._onDataChange(this.trips, Object.assign({}, this.trips, {
-      type: transport,
-    }));
-  }
   _deleteTrip() {
     this._onDataChange(this.trips, null);
   }
+  _saveTrip(newObj){
+    this._onDataChange(this.trips, Object.assign({}, this.trips, {
+      favorites: newObj.tripFavor,
+      type: newObj.transport,
+    }));
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    replace(this.tripEvent, this.editEvent);
+    this._mode = Mode.DEFAULT;
+  }
   _replaceEventToEdit() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    this.editEvent.reset(this.tripsOld);
+    this.editEvent.reset();
     replace(this.tripEvent, this.editEvent);
     this._mode = Mode.DEFAULT;
 
