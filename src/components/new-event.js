@@ -188,9 +188,9 @@ export default class CreateFormNewEventTemplate extends AbstractComponent {
   }
   getData() {
     const formData = new FormData(this.getElement());
-    return formData
+    return formData;
   }
-  saveTrip(){}
+  saveTrip() {}
   bind() {
     this._element.querySelector(`.event__save-btn `).addEventListener(`click`, (evt) => {
       this.saveTrip(evt, this.getData());

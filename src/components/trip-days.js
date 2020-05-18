@@ -2,6 +2,9 @@ import {MONTH_NAMES} from "../utils";
 import {default as AbstractComponent} from './abstract';
 
 const getTemplateTripDays = (trips) => {
+  if (trips.length === 0){
+    return;
+  }
   let dayOfMouth = trips[0].tripDate.getDate() - 1;
   let countOfMouth = trips[0].tripDate.getMonth();
   const limitDayMouth = () => {
