@@ -22,7 +22,6 @@ const renderTemplatePointRouteList = (container, trips, templatePointRouteList, 
     }
   }
   return newEventController;
-
 };
 export default class BoardController {
   constructor(container, pointModel) {
@@ -30,6 +29,7 @@ export default class BoardController {
     this._pointModel = pointModel;
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onViewChangeNewTrip = this._onViewChangeNewTrip.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this.newEventController = null;
     this.sortContainer = new CreateSortContainer();
@@ -45,24 +45,24 @@ export default class BoardController {
       render(this.container, this.createNoEventTemplate.getElement());
       return;
     } else {
-
-      unrender(this.createNoEventTemplate)
+      unrender(this.createNoEventTemplate);
     }
     this._onSortEvent(this.templatePointRouteList);
-if (this.newEventController === null) {
-  this.newEventController = new NewEventController(this.container, generateTripData(), this._onDataChange, this._onViewChange);
-  this.newEventController.bind()
-}
-
+    if (this.newEventController === null) {
+      this.newEventController = new NewEventController(this.container, generateTripData(), this._onDataChange, this._onViewChangeNewTrip);
+      this.newEventController.bind();
+    }
     const newEvent = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
     this._showedTripControllers = this._showedTripControllers.concat(newEvent);
     this._onViewChange();
-
   }
   _onViewChange() {
     this._showedTripControllers.forEach((controller) => controller.setDefaultView());
   }
-
+  _onViewChangeNewTrip() {
+    this._showedTripControllers.forEach((controller) => controller.setDefaultView());
+    this._setSortStateDefault();
+  }
   _onSortEvent() {
     let trips = this._pointModel.getPointsAll();
     this.sortTemplate = new CreateSort(generateSort());
@@ -100,31 +100,40 @@ if (this.newEventController === null) {
   }
   _updatePoints() {
     this._removePoints();
+
     unrender(this.sortTemplate);
     unrender(this.templatePointRouteList);
     this.init();
   }
   _onFilterChange() {
-    // this._setSortStateDefault();
+    this._setSortStateDefault();
     this._updatePoints();
   }
+  _setSortStateDefault() {
+    unrender(this.createNoEventTemplate);
+    let trips = this._pointModel.getPointsAll();
+    unrender(this.sortTemplate);
+    this.sortTemplate = new CreateSort(generateSort());
+    render(this.container, this.sortTemplate.getElement());
+    unrender(this.sortContainer);
+    unrender(this.templatePointRouteList);
 
-  _onDataChange(oldData, newData, save) {
-    if(newData === null){
+    const newEventSort = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
+    this._showedTripControllers = this._showedTripControllers.concat(newEventSort);
+  }
+
+  _onDataChange(oldData, newData) {
+    if (newData === null) {
       this._pointModel.removePoint(oldData.id);
       this._updatePoints();
       return;
-    }
-    else if (oldData === null){
+    } else if (oldData === null) {
       this._pointModel.addPoint(newData);
       this._updatePoints();
-
-    }
-    else {
+    } else {
       const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
       this._pointModel.updatePoint(oldData.id, newData);
       pointController.init(newData);
-
     }
   }
 }

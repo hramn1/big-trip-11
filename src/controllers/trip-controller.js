@@ -37,7 +37,7 @@ export default class TripController {
       this._deleteTrip();
     };
     this.editEvent.saveTrip = (evt, newObj) => {
-      evt.preventDefault()
+      evt.preventDefault();
       this._saveTrip(newObj);
     };
     if (oldETrip && oldEditEvent) {
@@ -50,7 +50,7 @@ export default class TripController {
   _deleteTrip() {
     this._onDataChange(this.trips, null);
   }
-  _saveTrip(newObj){
+  _saveTrip(newObj) {
     this._onDataChange(this.trips, Object.assign({}, this.trips, {
       favorites: newObj.tripFavor,
       type: newObj.transport,

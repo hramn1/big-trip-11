@@ -3,7 +3,6 @@ export default class Points {
   constructor() {
     this._points = [];
     this._dataChangeHandlers = [];
-    this._point = {};
     this._filterChangeHandlers = [];
     this._dataChangeHandlers = [];
     this._activeFilterType = FilterType.ALL;
@@ -12,10 +11,6 @@ export default class Points {
   getPointsAll() {
     return this._points;
   }
-  getPoint() {
-    return this._point;
-  }
-
   getPoints() {
     return getPointsByFilter(this.getPointsAllAscOrdered(), this._activeFilterType);
   }
@@ -35,7 +30,6 @@ export default class Points {
 
     this._points = [].concat(this._points.slice(0, index), point, this._points.slice(index + 1));
     this._callHandlers(this._dataChangeHandlers);
-    this._point = this._points[index];
     return true;
   }
   removePoint(id) {
@@ -56,9 +50,6 @@ export default class Points {
     this._filterChangeHandlers.push(handler);
   }
   addPoint(point) {
-    // if (!point.id) {
-    //   point.id = generateId();
-    // }
     this._points = [].concat(point, this._points);
     this._callHandlers(this._dataChangeHandlers);
   }

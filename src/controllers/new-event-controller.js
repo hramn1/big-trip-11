@@ -1,11 +1,10 @@
 import {default as CreateFormNewEventTemplate} from '../components/new-event';
 import {Position, render, unrender} from "../utils";
 export default class NewEventController {
-  constructor(container, trips, onDataChange, onViewChange) {
+  constructor(container, trips, onDataChange, onViewChangeNewTrip) {
     this.trips = trips;
-    this.container = container;
     this._onDataChange = onDataChange;
-    this._onViewChange = onViewChange;
+    this._onViewChangeNewTrip = onViewChangeNewTrip;
     this.templateFormCreate = null;
   }
   bind() {
@@ -14,27 +13,25 @@ export default class NewEventController {
     });
   }
   render() {
+    document.querySelector(`.trip-main__event-add-btn`).setAttribute(`disabled`, `disabled`);
+    this._onViewChangeNewTrip();
     this.templateFormCreate = new CreateFormNewEventTemplate();
 
     let container = document.querySelector(`.trip-events__trip-sort`);
-    if(container === null){
-      container = document.querySelector(`.trip-events`)
+    if (container === null) {
+      container = document.querySelector(`.trip-events`);
       render(container, this.templateFormCreate.getElement(), Position.AFTERBEGIN);
-
     } else {
-      render(container,  this.templateFormCreate.getElement(), Position.AFTER);
-
+      render(container, this.templateFormCreate.getElement(), Position.AFTER);
     }
     this.templateFormCreate.saveTrip = (evt, data) =>{
-      evt.preventDefault()
-      this.saveTrip(evt, data)
-    }
+      evt.preventDefault();
+      this.saveTrip(evt, data);
+    };
   }
-  saveTrip(evt, data){
-
-    unrender(this.templateFormCreate)
-    this._onViewChange();
-
+  saveTrip(evt, data) {
+    document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
+    unrender(this.templateFormCreate);
     this._onDataChange(null, Object.assign({}, this.trips, {
       city: data.get(`event-destination`),
     }));
