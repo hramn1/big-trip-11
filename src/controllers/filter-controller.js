@@ -2,9 +2,11 @@ import FilterComponent from "../components/filters";
 import {FilterType, getPointsByFilter, render, replace, Position} from "../utils";
 
 export default class FilterController {
-  constructor(container, pointsModel) {
+  constructor(container, pointsModel, statisticsComponent, templateMenu) {
     this._container = container;
     this._pointsModel = pointsModel;
+    this._statisticsComponent = statisticsComponent;
+    this._templateMenu = templateMenu;
 
     this._activeFilterType = FilterType.ALL;
     this._filterComponent = null;
@@ -33,7 +35,7 @@ export default class FilterController {
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
     } else {
-      render(container, this._filterComponent.getElement(), Position.AFTERBEGIN);
+      render(container, this._filterComponent.getElement(), Position.BEFOREEND);
     }
   }
 
@@ -44,6 +46,8 @@ export default class FilterController {
   }
 
   _onFilterChange(filterType) {
+    this._statisticsComponent.hide();
+    this._templateMenu.setDefault();
     this._pointsModel.setFilter(filterType);
     this._activeFilterType = filterType;
   }

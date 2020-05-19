@@ -14,7 +14,7 @@ const COLOR = {
   textColor: `#232323`,
   bgColor: `#6bb0e5`,
   bgColorHover: `#3299e9`
-}
+};
 const getUniqItems = (item, index, array) => {
   return array.indexOf(item) === index;
 };
@@ -354,6 +354,7 @@ export default class Statistics extends AbstractSmartComponent {
     super.show();
     this.rerender(this._pointsModel);
   }
+
 
   recoveryListeners() {}
 

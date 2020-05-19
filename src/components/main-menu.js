@@ -26,7 +26,6 @@ export default class CreateTemplateMenu extends AbstractComponent {
       if (evt.target.tagName !== `A`) {
         return;
       }
-      debugger
       const menuItem = evt.target.textContent;
       this._setMenuItemActive(menuItem);
       handler(menuItem);

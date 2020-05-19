@@ -9,6 +9,7 @@ import {default as TripController} from "./trip-controller";
 import {default as NewEventController} from "./new-event-controller";
 
 
+
 const renderTemplatePointRouteList = (container, trips, templatePointRouteList, onDataChange, onViewChange) => {
   render(container, templatePointRouteList.getElement());
   const routeList = document.querySelectorAll(`.trip-days__item .trip-events__item `);
@@ -25,9 +26,12 @@ const renderTemplatePointRouteList = (container, trips, templatePointRouteList, 
   return newEventController;
 };
 export default class BoardController {
-  constructor(container, pointModel) {
+  constructor(container, pointModel, statisticsComponent, templateMenu, api) {
     this.container = container;
     this._pointModel = pointModel;
+    this._statisticsComponent = statisticsComponent;
+    this._templateMenu = templateMenu;
+    this._api = api;
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onViewChangeNewTrip = this._onViewChangeNewTrip.bind(this);
@@ -50,7 +54,7 @@ export default class BoardController {
     }
     this._onSortEvent(this.templatePointRouteList);
     if (this.newEventController === null) {
-      this.newEventController = new NewEventController(this.container, generateTripData(), this._onDataChange, this._onViewChangeNewTrip);
+      this.newEventController = new NewEventController(this.container, generateTripData(), this._statisticsComponent, this._templateMenu, this._onDataChange, this._onViewChangeNewTrip);
       this.newEventController.bind();
     }
     const newEvent = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
@@ -136,8 +140,12 @@ export default class BoardController {
   }
   _onDataChange(oldData, newData) {
     if (newData === null) {
-      this._pointModel.removePoint(oldData.id);
-      this._updatePoints();
+        this._api.deletePoint(oldData.id)
+          .then(() => {
+            this._pointModel.removePoint(oldData.id)
+            this._updatePoints();
+        });
+
     } else if (oldData === null) {
       this._pointModel.addPoint(newData);
       this._updatePoints();

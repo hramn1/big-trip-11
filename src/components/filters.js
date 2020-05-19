@@ -41,4 +41,5 @@ export default class CreateFilterTemplate extends AbstractComponent {
       it.checked = false
     }
   }
+
 }
