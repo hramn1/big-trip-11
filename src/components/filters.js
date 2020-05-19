@@ -34,6 +34,11 @@ export default class CreateFilterTemplate extends AbstractComponent {
       const filterName = getFilterNameById(evt.target.id);
       handler(filterName);
     });
-
+  }
+  static filterDefault() {
+    const el = document.querySelectorAll(`.trip-filters__filter-input`);
+    for (let it of el)  {
+      it.checked = false
+    }
   }
 }
