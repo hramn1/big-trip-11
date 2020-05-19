@@ -2,6 +2,8 @@ import {getPointsByFilter, getPointsOrdered, FilterType} from "../utils";
 export default class Points {
   constructor() {
     this._points = [];
+    this._cities = [];
+    this._offers = [];
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
     this._dataChangeHandlers = [];
@@ -12,7 +14,16 @@ export default class Points {
     return this._points;
   }
   getPoints() {
+    // if (getPointsByFilter(this.getPointsAllAscOrdered(), this._activeFilterType).length === 0) {
+    //   return this._points;
+    // }
     return getPointsByFilter(this.getPointsAllAscOrdered(), this._activeFilterType);
+  }
+  getCities() {
+    return this._cities;
+  }
+  getOffers() {
+    return this._offers;
   }
   getPointsAllAscOrdered() {
     return getPointsOrdered(this._points);
@@ -21,6 +32,15 @@ export default class Points {
     this._points = Array.from(points);
     this._callHandlers(this._dataChangeHandlers);
   }
+  setCities(cities) {
+    this._cities = Array.from(cities);
+    this._callHandlers(this._dataChangeHandlers);
+  }
+  setOffers(offers) {
+    this._offers = Array.from(offers);
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
 
   updatePoint(id, point) {
     const index = this._points.findIndex((it) => it.id === id);

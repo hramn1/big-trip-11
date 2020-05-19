@@ -1,11 +1,13 @@
 import {default as CreateFormNewEventTemplate} from '../components/new-event';
 import {Position, render, unrender} from "../utils";
 export default class NewEventController {
-  constructor(container, trips, onDataChange, onViewChangeNewTrip) {
+  constructor(container, trips, statisticsComponent, templateMenu, onDataChange, onViewChangeNewTrip) {
     this.trips = trips;
     this._onDataChange = onDataChange;
     this._onViewChangeNewTrip = onViewChangeNewTrip;
     this.templateFormCreate = null;
+    this._statisticsComponent = statisticsComponent;
+    this._templateMenu = templateMenu;
   }
   bind() {
     document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, ()=>{
@@ -15,6 +17,8 @@ export default class NewEventController {
   render() {
     document.querySelector(`.trip-main__event-add-btn`).setAttribute(`disabled`, `disabled`);
     this._onViewChangeNewTrip();
+    this._statisticsComponent.hide();
+    this._templateMenu.setDefault();
     this.templateFormCreate = new CreateFormNewEventTemplate();
 
     let container = document.querySelector(`.trip-events__trip-sort`);
