@@ -48,8 +48,6 @@ const startApplication = (points, cities, offers) => {
   pointModel.setCities(cities);
   pointModel.setOffers(offers);
 
-
-
   const boardController = new BoardController(mainContent, pointModel, statisticsComponent, templateMenu, api);
 
   render(mainContent, statisticsComponent.getElement(), Position.AFTER);

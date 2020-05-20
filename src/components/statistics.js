@@ -12,7 +12,7 @@ const TRANSFER_EVENT_TYPES = [
 ];
 const COLOR = {
   textColor: `#232323`,
-  bgColor: `#6bb0e5`,
+  bgColor: `#69c0f1`,
   bgColorHover: `#3299e9`
 };
 const getUniqItems = (item, index, array) => {
@@ -24,7 +24,6 @@ const getUniqItemCount = (array, item) => {
 };
 
 const convertTimeDiffToHours = (timeDiff) => {
-  // в большую сторону: 1ч 5мин-> 2Н
   return Math.ceil(timeDiff / (3600 * 1000));
 };
 
@@ -60,16 +59,9 @@ const chartCallback = (animation) => {
       tickIcon.addEventListener(`load`, onLoadImage);
       tickIcon.src = `img/icons/${tick.toLowerCase()}.png`;
     });
-    // iconElement.src = 'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw==';
   }
 };
 
-/* const areaDefaultColorSet = {
-  beforeInit: (chartConfig) => {
-    chartConfig.chart.options.defaultColor = `rgba(0, 128, 128, 0.5)`;
-  }
-};
-*/
 
 const renderMoneyChart = (chartCtx, tripEvents) => {
   const chartLabels = tripEvents.map((tripEvent) => tripEvent.type)
@@ -82,7 +74,7 @@ const renderMoneyChart = (chartCtx, tripEvents) => {
   chartCtx.height = BAR_HEIGHT * chartLabels.length;
 
   return new Chart(chartCtx, {
-    plugins: [ChartDataLabels/* , areaDefaultColorSet */],
+    plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
       labels: chartLabels.map((text) => text.toUpperCase()),
@@ -94,7 +86,7 @@ const renderMoneyChart = (chartCtx, tripEvents) => {
       }]
     },
     options: {
-      events: [`click`], // иначе дергается при hover
+      events: [`click`],
       plugins: {
         datalabels: {
           font: {
@@ -147,6 +139,7 @@ const renderMoneyChart = (chartCtx, tripEvents) => {
         enabled: false,
       },
       animation: {
+        duration: 2000,
         onComplete: chartCallback
       }
     }
@@ -169,8 +162,8 @@ const renderTransportChart = (chartCtx, tripEvents) => {
       labels: chartLabels.map((text) => text.toUpperCase()),
       datasets: [{
         data: chartData,
-        backgroundColor: `#078ff0`,
-        hoverBackgroundColor: `#ffffff`,
+        backgroundColor: COLOR.bgColor,
+        hoverBackgroundColor: COLOR.bgColorHover,
         anchor: `start`
       }]
     },
@@ -181,7 +174,7 @@ const renderTransportChart = (chartCtx, tripEvents) => {
           font: {
             size: 13
           },
-          color: `#000000`,
+          color: COLOR.textColor,
           anchor: `end`,
           align: `start`,
           formatter: (val) => `${val}x`
@@ -190,7 +183,7 @@ const renderTransportChart = (chartCtx, tripEvents) => {
       title: {
         display: true,
         text: `TRANSPORT`,
-        fontColor: `#000000`,
+        fontColor: COLOR.textColor,
         fontSize: 23,
         position: `left`,
         padding: ICON_SIZE + ICON_PADDING / 2,
@@ -198,7 +191,7 @@ const renderTransportChart = (chartCtx, tripEvents) => {
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: `#000000`,
+            fontColor: COLOR.textColor,
             padding: 5,
             fontSize: 13,
           },
@@ -227,6 +220,7 @@ const renderTransportChart = (chartCtx, tripEvents) => {
         enabled: false,
       },
       animation: {
+        duration: 2500,
         onComplete: chartCallback
       }
     }
@@ -250,8 +244,8 @@ const renderTimeSpendChart = (chartCtx, tripEvents) => {
       labels: chartLabels.map((text) => `TO ${text.toUpperCase()}`),
       datasets: [{
         data: chartData,
-        backgroundColor: `#6bb0e5`,
-        hoverBackgroundColor: `#ffffff`,
+        backgroundColor: COLOR.bgColor,
+        hoverBackgroundColor: COLOR.bgColorHover,
         anchor: `start`
       }]
     },
@@ -262,7 +256,7 @@ const renderTimeSpendChart = (chartCtx, tripEvents) => {
           font: {
             size: 13
           },
-          color: `#000000`,
+          color: COLOR.textColor,
           anchor: `end`,
           align: `start`,
           formatter: (val) => `${val}H`
@@ -271,7 +265,7 @@ const renderTimeSpendChart = (chartCtx, tripEvents) => {
       title: {
         display: true,
         text: `TIME SPEND`,
-        fontColor: `#000000`,
+        fontColor: COLOR.textColor,
         fontSize: 23,
         position: `left`,
         padding: ICON_SIZE + ICON_PADDING / 2,
@@ -279,7 +273,7 @@ const renderTimeSpendChart = (chartCtx, tripEvents) => {
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: `#000000`,
+            fontColor: COLOR.textColor,
             padding: 5,
             fontSize: 13,
           },
@@ -309,10 +303,9 @@ const renderTimeSpendChart = (chartCtx, tripEvents) => {
       },
     }
   });
-}; // renderTimeSpendChart
+};
 
-
-const createStatisticsTemplate = (/* {tripEvents, dateFrom, dateTo} */) => {
+const createStatisticsTemplate = () => {
 
   return (
     `<section class="statistics">
@@ -354,7 +347,6 @@ export default class Statistics extends AbstractSmartComponent {
     super.show();
     this.rerender(this._pointsModel);
   }
-
 
   recoveryListeners() {}
 

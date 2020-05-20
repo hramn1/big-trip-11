@@ -2,7 +2,6 @@ import {addZero, getPreTitleCity} from "../utils";
 import {default as AbstractSmartComponent} from "./abstract-smart";
 
 const getTemplatePointRoute = (trip) => {
-  console.log('1')
   const offerTripPoint = (item) => {
     return (
       `<li class="event__offer">

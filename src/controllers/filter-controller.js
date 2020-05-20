@@ -24,7 +24,7 @@ export default class FilterController {
       return {
         name: filterType,
         isChecked: filterType === this._activeFilterType,
-        isDisabled: !(getPointsByFilter(this._pointsModel.getPointsAll(), filterType).length),
+        isDisabled: !(getPointsByFilter(this._pointsModel.getPoints(), filterType).length),
       };
     });
 

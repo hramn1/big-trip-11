@@ -34,7 +34,6 @@ export default class TripController {
 
 
     this.editEvent.deleteTrip = () => {
-      console.log(this.editEvent.getElement().querySelector(`.event__reset-btn`))
       this.editEvent.getElement().querySelector(`.event__reset-btn`).textContent = `Deleting`;
       this._deleteTrip();
     };

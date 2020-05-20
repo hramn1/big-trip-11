@@ -9,7 +9,6 @@ import {default as TripController} from "./trip-controller";
 import {default as NewEventController} from "./new-event-controller";
 
 
-
 const renderTemplatePointRouteList = (container, trips, templatePointRouteList, onDataChange, onViewChange) => {
   render(container, templatePointRouteList.getElement());
   const routeList = document.querySelectorAll(`.trip-days__item .trip-events__item `);
@@ -71,7 +70,7 @@ export default class BoardController {
     CreateFilterTemplate.filterDefault();
   }
   _onSortEvent() {
-    let trips = this._pointModel.getPointsAll();
+    let trips = this._pointModel.getPoints();
     this.sortTemplate = new CreateSort(generateSort());
     this.sortTemplate.sortEvent = (evt) => {
       this._showedTripControllers = [];
@@ -117,7 +116,7 @@ export default class BoardController {
   }
   _setSortStateDefault() {
     unrender(this.createNoEventTemplate);
-    let trips = this._pointModel.getPointsAll();
+    let trips = this._pointModel.getPoints();
     unrender(this.sortTemplate);
     this.sortTemplate = new CreateSort(generateSort());
     render(this.container, this.sortTemplate.getElement());
@@ -128,22 +127,22 @@ export default class BoardController {
     this._showedTripControllers = this._showedTripControllers.concat(newEventSort);
   }
   show() {
-    this.templatePointRouteList.show()
-    this.sortTemplate.show()
+    this.templatePointRouteList.show();
+    this.sortTemplate.show();
   }
 
   hide() {
     this._onViewChange();
-    this.templatePointRouteList.hide()
-    this.sortTemplate.hide()
+    this.templatePointRouteList.hide();
+    this.sortTemplate.hide();
 
   }
   _onDataChange(oldData, newData) {
     if (newData === null) {
-        this._api.deletePoint(oldData.id)
-          .then(() => {
-            this._pointModel.removePoint(oldData.id)
-            this._updatePoints();
+      this._api.deletePoint(oldData.id)
+        .then(() => {
+          this._pointModel.removePoint(oldData.id);
+          this._updatePoints();
         });
 
     } else if (oldData === null) {

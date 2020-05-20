@@ -9,10 +9,6 @@ export default class Points {
     this._dataChangeHandlers = [];
     this._activeFilterType = FilterType.ALL;
   }
-
-  getPointsAll() {
-    return this._points;
-  }
   getPoints() {
     // if (getPointsByFilter(this.getPointsAllAscOrdered(), this._activeFilterType).length === 0) {
     //   return this._points;

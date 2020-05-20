@@ -5,7 +5,6 @@ export const MenuItem = {
 };
 const MENU_ITEM = `trip-tabs__btn`;
 const MENU_ITEM_ACTIVE = `trip-tabs__btn--active`;
-const NEW_EVENT_BTN = `trip-main__event-add-btn`;
 const getTemplateMenu = () => {
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
