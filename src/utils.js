@@ -4,6 +4,8 @@ export const Position = {
   BEFOREEND: `beforeend`,
   AFTER: `after`
 };
+export const AUTHORIZATION = `Basic er883jdzbdwss`;
+export const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
 export const MONTH_NAMES = [
   `JAN`,
   `FEB`,

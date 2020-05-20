@@ -67,6 +67,6 @@ export default class CreateInfoTripTemplate extends AbstractComponent {
     this.pointModel = pointModel;
   }
   getTemplate() {
-    return getTemplateInfoRoute(this.pointModel.getPointsAll());
+    return getTemplateInfoRoute(this.pointModel.getPoints());
   }
 }
