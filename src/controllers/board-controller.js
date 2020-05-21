@@ -56,7 +56,7 @@ export default class BoardController {
     }
     this._onSortEvent(this.templatePointRouteList);
     if (this.newEventController === null) {
-      this.newEventController = new NewEventController(this.container, generateTripData(), this._statisticsComponent, this._templateMenu, this._onDataChange, this._onViewChangeNewTrip);
+      this.newEventController = new NewEventController(this.container, generateTripData(), this._statisticsComponent, this._templateMenu, this._pointModel, this._onDataChange, this._onViewChangeNewTrip);
       this.newEventController.bind();
     }
     const newEvent = renderTemplatePointRouteList(this.container, trips, this._pointModel, this.templatePointRouteList, this._onDataChange, this._onViewChange);
@@ -152,11 +152,11 @@ export default class BoardController {
       this._pointModel.addPoint(newData);
       this._updatePoints();
     } else {
-      const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
+      // const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
       this._api.updatePoint(oldData.id, newData)
         .then(() => {
           this._pointModel.updatePoint(oldData.id, newData);
-          pointController.init(newData);
+          // pointController.init(newData);
           this._updatePoints();
         });
     }
