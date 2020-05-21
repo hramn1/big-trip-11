@@ -1,4 +1,4 @@
-import {addZero, getPreTitleCity} from "../utils";
+import {addZero, getPreTitleCity, getCappitlize} from "../utils";
 import {default as AbstractSmartComponent} from "./abstract-smart";
 
 const getTemplatePointRoute = (trip) => {
@@ -18,7 +18,11 @@ const getTemplatePointRoute = (trip) => {
     const hourMinute = `${addZero(tripDate.getHours())}:${addZero(tripDate.getMinutes())}`;
     return hourMinute;
   };
+  const getTimeTrip = () =>{
+    return trip.tripDateEnd - trip.tripDate;
+  };
   const formatTimeInterval = (diff) => {
+    diff = Math.floor(diff / 1000 / 60);
     const intervalMinutes = diff % 60;
     diff = Math.floor(diff / 60); // hours
     const intervalHours = diff % 24;
@@ -28,7 +32,7 @@ const getTemplatePointRoute = (trip) => {
     return `${intervalDays ? intervalDays + `D ` : `` }${intervalHours ? intervalHours + `H ` : ``}${intervalMinutes}M`;
   };
   const getTripTypeWithPre = () => {
-    return `${trip.type} ${getPreTitleCity(trip.type)}`;
+    return `${getCappitlize(trip.type)} ${getPreTitleCity(trip.type)}`;
   };
   return (
     `<div class="event">
@@ -44,7 +48,7 @@ const getTemplatePointRoute = (trip) => {
           &mdash;
           <time class="event__end-time" datetime="${trip.tripDateEnd}">${getHourMinuteStart(trip.tripDateEnd)}</time>
         </p>
-        <p class="event__duration">${formatTimeInterval(trip.timeTrip)}</p>
+        <p class="event__duration">${formatTimeInterval(getTimeTrip())}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${trip.price}</span>

@@ -11,7 +11,22 @@ export default class ModelPoint {
     this.tripDateEnd = new Date(data[`date_to`]) || null;
     this.offers = data[`offers`] || null;
   }
-
+  toRAW() {
+    return {
+      'base_price': this.price,
+      'date_from': this.tripDate.toISOString(),
+      'date_to': this.tripDateEnd.toISOString(),
+      'destination': {
+        'pictures': this.picture,
+        'description': this.description,
+        'name': this.city,
+      },
+      'id': this.id,
+      'is_favorite': this.favorites,
+      'offers': this.offers,
+      'type': this.type
+    };
+  }
   static parsePoint(data) {
     return new ModelPoint(data);
   }
@@ -20,34 +35,6 @@ export default class ModelPoint {
     return data.map(ModelPoint.parsePoint);
   }
 
-  toRAW() {
-    return {
-      'film_info': {
-        'poster': this.posterLink,
-        'title': this.title,
-        'alternative_title': this.alternativeTitle,
-        'description': this.description,
-        'runtime': this.duration,
-        'total_rating': parseInt(this.totalRating, 10),
-        'release': {
-          'date': new Date(this.year),
-          'release_country': this.releaseCountry,
-        },
-        'genre': [...this.genre.values()],
-        'age_rating': this.ageRating,
-        'actors': this.actors,
-        'director': this.director,
-        'writers': this.writers,
-      },
-      'user_details': {
-        'already_watched': this.controls.isMarkedAsWatched,
-        'favorite': this.controls.isFavorite,
-        'watchlist': this.controls.isAddedToWatchlist,
-        'personal_rating': parseInt(this.personalRating, 10) || 0,
-        'watching_date': new Date() || null,
-      },
-      'comments': this.comments,
-    };
-  }
+
 }
 

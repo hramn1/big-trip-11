@@ -1,4 +1,4 @@
-import ModelPoint from "./models/parsePoint.js";
+import ModelPoint from "./models/parsePoint";
 
 const Method = {
   GET: `GET`,
@@ -55,8 +55,8 @@ const API = class {
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
     })
-      .then((response) => response.json());
-    // .then(Point.parsePoint.js);
+      .then((response) => response.json())
+        .then(ModelPoint.parsePoint);
   }
 
   deletePoint(id) {

@@ -1,6 +1,5 @@
 import {default as CreatePointRoute} from '../components/route-point';
 import {default as CreateEditEven} from '../components/edit-event';
-import {tripData, offers} from '../data';
 import {render, replace, unrender} from "../utils";
 
 const Mode = {
@@ -9,8 +8,9 @@ const Mode = {
 };
 
 export default class TripController {
-  constructor(trips, container, onDataChange, onViewChange) {
+  constructor(pointModel, container, onDataChange, onViewChange) {
     this.container = container;
+    this.pointModel = pointModel;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
@@ -19,11 +19,12 @@ export default class TripController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
   init(trip) {
+
     this.trips = trip;
     const oldETrip = this.tripEvent;
     const oldEditEvent = this.editEvent;
     this.tripEvent = new CreatePointRoute(this.trips);
-    this.editEvent = new CreateEditEven(this.trips, tripData, offers);
+    this.editEvent = new CreateEditEven(this.trips, this.pointModel);
 
     this.tripEvent.editForm = () => {
       this._replaceEditToEvent();
@@ -39,6 +40,7 @@ export default class TripController {
     };
     this.editEvent.saveTrip = (evt, newObj) => {
       evt.preventDefault();
+      this.editEvent.getElement().querySelector(`.event__save-btn`).textContent = `Saving`;
       this._saveTrip(newObj);
     };
     if (oldETrip && oldEditEvent) {
@@ -52,11 +54,19 @@ export default class TripController {
     this._onDataChange(this.trips, null);
   }
   _saveTrip(newObj) {
-    this._onDataChange(this.trips, Object.assign({}, this.trips, {
-      favorites: newObj.tripFavor,
-      type: newObj.transport,
-      price: Number(newObj.priceTrip),
-    }));
+    let saveTrip = Object.defineProperty(this.trips, `favorites`, {
+      value: newObj.tripFavor
+    });
+    saveTrip = Object.defineProperty(this.trips, `type`, {
+      value: newObj.transport
+    });
+    saveTrip = Object.defineProperty(this.trips, `price`, {
+      value: Number(newObj.priceTrip)
+    });
+    saveTrip = Object.defineProperty(this.trips, `city`, {
+      value: newObj.city
+    });
+    this._onDataChange(this.trips, saveTrip);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     replace(this.tripEvent, this.editEvent);
     this._mode = Mode.DEFAULT;
