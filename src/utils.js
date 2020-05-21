@@ -5,7 +5,7 @@ export const Position = {
   AFTER: `after`
 };
 export const AUTHORIZATION = `Basic er883jdzbdwss`;
-export const END_POINT = `https://11.ecmascript.pages.academy/big-trip/`;
+export const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 export const MONTH_NAMES = [
   `JAN`,
   `FEB`,
@@ -88,7 +88,7 @@ export const getPointsOrdered = (tripEvents) => {
   return tripEvents.slice().sort((a, b) => a.startTime - b.startTime);
 };
 export const getPreTitleCity = (point) => {
-  if (point === `Check-in` || point === `Sightseeing` || point === `Restaurant`) {
+  if (point === `check-in` || point === `sightseeing` || point === `restaurant`) {
     return `in`;
   } else {
     return `to`;
@@ -102,4 +102,8 @@ export const limitDayMouth = (countOfMouth) => {
   } else {
     return 30;
   }
+};
+export const getCappitlize = (str) => {
+  const firstWord = str[0].toUpperCase();
+  return str.replace(str[0], firstWord);
 };

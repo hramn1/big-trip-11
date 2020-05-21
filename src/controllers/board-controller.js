@@ -9,20 +9,23 @@ import {default as TripController} from "./trip-controller";
 import {default as NewEventController} from "./new-event-controller";
 
 
-const renderTemplatePointRouteList = (container, trips, templatePointRouteList, onDataChange, onViewChange) => {
+const renderTemplatePointRouteList = (container, trips, pointModel, templatePointRouteList, onDataChange, onViewChange) => {
   render(container, templatePointRouteList.getElement());
   const routeList = document.querySelectorAll(`.trip-days__item .trip-events__item `);
-  const newEventController = [];
+
+  const newEventControllers = [];
+
   for (let it of routeList) {
     const dayDateElement = it.getAttribute(`data-day`);
     const showingEvents = trips.filter((trip) => `${trip.tripDate.getMonth()} ${trip.tripDate.getDate()}` === dayDateElement);
     for (let tripEvent of showingEvents) {
-      const eventController = new TripController(tripEvent, it, onDataChange, onViewChange);
+      const eventController = new TripController(pointModel, it, onDataChange, onViewChange);
       eventController.init(tripEvent);
-      newEventController.push(eventController);
+      eventController.init(tripEvent);
+      newEventControllers.push(eventController);
     }
   }
-  return newEventController;
+  return newEventControllers;
 };
 export default class BoardController {
   constructor(container, pointModel, statisticsComponent, templateMenu, api) {
@@ -56,7 +59,7 @@ export default class BoardController {
       this.newEventController = new NewEventController(this.container, generateTripData(), this._statisticsComponent, this._templateMenu, this._onDataChange, this._onViewChangeNewTrip);
       this.newEventController.bind();
     }
-    const newEvent = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
+    const newEvent = renderTemplatePointRouteList(this.container, trips, this._pointModel, this.templatePointRouteList, this._onDataChange, this._onViewChange);
     this._showedTripControllers = this._showedTripControllers.concat(newEvent);
     this._onViewChange();
   }
@@ -77,14 +80,14 @@ export default class BoardController {
       if (evt.target.id === `sort-event`) {
         unrender(this.sortContainer);
         unrender(this.templatePointRouteList);
-        const newEventSort = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
+        const newEventSort = renderTemplatePointRouteList(this.container, trips, this._pointModel, this.templatePointRouteList, this._onDataChange, this._onViewChange);
         this._showedTripControllers = this._showedTripControllers.concat(newEventSort);
         return;
       } else if (evt.target.id === `sort-price`) {
         trips = [...trips].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.price) - parseFloat(tripsSecond.price)));
         this._showedTripControllers = [...this._showedTripControllers].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.price) - parseFloat(tripsSecond.price)));
       } else {
-        trips = [...trips].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.timeTrip) - parseFloat(tripsSecond.timeTrip)));
+        trips = [...trips].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.tripDateEnd - tripsFirst.tripDate) - parseFloat(tripsSecond.tripDateEnd - tripsSecond.tripDate)));
         this._showedTripControllers = [...this._showedTripControllers].sort((tripsSecond, tripsFirst) => (parseFloat(tripsFirst.price) - parseFloat(tripsSecond.price)));
       }
       this.sortTemplate.unrenderDay();
@@ -93,7 +96,7 @@ export default class BoardController {
       render(this.container, this.sortContainer.getElement());
       for (let it of trips) {
         const routeList = document.querySelector(`.trip-days__item .trip-events__item `);
-        const eventControllerSort = new TripController(it, routeList, this._onDataChange, this._onViewChange);
+        const eventControllerSort = new TripController(this._pointModel, routeList, this._onDataChange, this._onViewChange);
         eventControllerSort.init(it);
         this._showedTripControllers = this._showedTripControllers.concat(eventControllerSort);
       }
@@ -123,7 +126,7 @@ export default class BoardController {
     unrender(this.sortContainer);
     unrender(this.templatePointRouteList);
 
-    const newEventSort = renderTemplatePointRouteList(this.container, trips, this.templatePointRouteList, this._onDataChange, this._onViewChange);
+    const newEventSort = renderTemplatePointRouteList(this.container, trips, this._pointModel, this.templatePointRouteList, this._onDataChange, this._onViewChange);
     this._showedTripControllers = this._showedTripControllers.concat(newEventSort);
   }
   show() {
@@ -150,8 +153,12 @@ export default class BoardController {
       this._updatePoints();
     } else {
       const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
-      this._pointModel.updatePoint(oldData.id, newData);
-      pointController.init(newData);
+      this._api.updatePoint(oldData.id, newData)
+        .then(() => {
+          this._pointModel.updatePoint(oldData.id, newData);
+          pointController.init(newData);
+          this._updatePoints();
+        });
     }
   }
 }
