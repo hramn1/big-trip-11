@@ -1,13 +1,28 @@
 import {default as AbstractSmartComponent} from "./abstract-smart";
-import {getPreTitleCity, getCappitlize} from "../utils";
+import {getPreTitleCity, getCappitlize, parseFormatTime} from "../utils";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import {encode} from "he";
-
-const getTemplateFormCreate = (pointModel, transport, visual) => {
-
+const getTemplateFormCreate = (pointModel, transport, visual, visualDest, saveBtn, city, price, timeStartTrip, timeEndTrip, offer) => {
+  const conditionSaveBtn = saveBtn;
+  document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
   const offers = pointModel.getOffers();
   const cities = pointModel.getCities();
+  const dest = cities.filter((it) => it.name === city);
+  let cityDescr = ``;
+  let cityPhoto = [];
+  if (dest.length > 0) {
+    cityDescr = dest[0].description;
+    cityPhoto = dest[0].pictures;
+  }
+  const getTemplatePhoto = (it) =>{
+    return (
+      `<p><img class="event__photo" src="${it.src}" alt="${it.description}"></p>`
+    );
+  };
+
+  const TemplatePhotoMarkup = cityPhoto.map((it) => getTemplatePhoto(it)).join(`\n`);
+
   const typesTransport = offers.map((it) => it.type);
   const cityDest = cities.map((it) => it.name);
   const getTripTypeWithPre = () => {
@@ -17,7 +32,7 @@ const getTemplateFormCreate = (pointModel, transport, visual) => {
     return (
       `<div class="event__type-item">
         <input id="event-type-${it.toLowerCase()}-99" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
-        <label class="event__type-label  event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-99">${it}</label>
+        <label class="event__type-label  event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-99">${getCappitlize(it)}</label>
       </div>`
     );
   };
@@ -25,9 +40,15 @@ const getTemplateFormCreate = (pointModel, transport, visual) => {
   const typeActivityMarkup = typesTransport.slice(7).map((it) => typeTransport(it)).join(`\n`);
   // // Офер
   const getOffers = (it) => {
+    let isChecked = ``;
+    for (let item of offer) {
+      if (it.title === item.name) {
+        isChecked = (item.checked) ? `checked` : ``;
+      }
+    }
     return `
   <div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${it.title}" type="checkbox" name="event-offer-${it.title}">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${it.title}" ${isChecked} type="checkbox" name="${it.title}">
     <label class="event__offer-label" for="event-offer-${it.title}">
       <span class="event__offer-title">${it.title}</span>
       &plus;
@@ -54,7 +75,7 @@ const getTemplateFormCreate = (pointModel, transport, visual) => {
               <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                   <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" width="17" height="17" src="img/icons/bus.png" alt="Event type icon">
+                  <img class="event__type-icon" width="17" height="17" src="img/icons/${transport.toLowerCase()}.png" alt="Event type icon">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
                       <div class="event__type-list">
@@ -73,7 +94,7 @@ const getTemplateFormCreate = (pointModel, transport, visual) => {
                 <label class="event__label  event__type-output" for="event-destination-1">
                   ${getTripTypeWithPre()}
                 </label>
-                <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
+                <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${encode(city)}" list="destination-list-1">
                 <datalist id="destination-list-1">
                           ${cityTripMarkup}
                 </datalist>
@@ -83,12 +104,12 @@ const getTemplateFormCreate = (pointModel, transport, visual) => {
                 <label class="visually-hidden" for="event-start-time-1">
                   From
                 </label>
-                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 00:00">
+                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${timeStartTrip}">
                 &mdash;
                 <label class="visually-hidden" for="event-end-time-1">
                   To
                 </label>
-                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 00:00">
+                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${timeEndTrip}">
               </div>
 
               <div class="event__field-group  event__field-group--price">
@@ -96,10 +117,10 @@ const getTemplateFormCreate = (pointModel, transport, visual) => {
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
               </div>
 
-              <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+              <button class="event__save-btn  btn  btn--blue" ${conditionSaveBtn} type="submit">Save</button>
               <button class="event__reset-btn" type="reset">Cancel</button>
             </header>
                               <section class="event__details ${visual}">
@@ -111,6 +132,17 @@ const getTemplateFormCreate = (pointModel, transport, visual) => {
                       </div>
                     </section>
                   </section>
+                                <section class="event__section  event__section--destination ${visualDest}">
+                <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                <p class="event__destination-description">${cityDescr}</p>
+
+                <div class="event__photos-container">
+                  <div class="event__photos-tape">
+                  ${TemplatePhotoMarkup}
+                  </div>
+                </div>
+              </section>
+            </section>
           </form>`
   );
 };
@@ -118,22 +150,119 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
   constructor(pointModel) {
     super();
     this.pointModel = pointModel;
-    this.transport = `Bus`;
+    this.transport = `choose type`;
     this.visual = `visually-hidden`;
+    this.visualDest = `visually-hidden`;
+    this.saveBtn = `disabled`;
+    this.city = ``;
+    this.price = ``;
+    this.offer = ``;
+    this._flatpickrStart = null;
+    this.timeStartTrip = `20/05/20 00:00`;
+    this._flatpickrEnd = null;
+    this.timeEndTrip = `22/05/20 00:00`;
+    this._applyFlatpickr();
+
   }
+
   getTemplate() {
-    return getTemplateFormCreate(this.pointModel, this.transport, this.visual);
+    return getTemplateFormCreate(this.pointModel, this.transport, this.visual, this.visualDest, this.saveBtn, this.city, this.price, this.timeStartTrip, this.timeEndTrip, this.offer);
+  }
+
+  _validate() {
+    const cities = this.pointModel.getCities();
+    const cityDest = cities.map((it) => it.name);
+    const priceTrip = this._element.querySelector(`.event__input--price`).value;
+    const cityTrip = this._element.querySelector(`.event__input--destination`).value;
+
+    const cityTripValidate = cityDest.some((el) => el === cityTrip);
+    if (priceTrip !== `0` && priceTrip !== `` && cityTripValidate && this.transport !== `choose type`) {
+      this.saveBtn = ``;
+    } else {
+      this.saveBtn = `disabled`;
+    }
+  }
+
+  validatePrice(evt) {
+    if (isNaN(evt.target.value)) {
+      evt.target.value = evt.target.value.replace(/[^0-9]/g, ``);
+    }
+  }
+
+  getPrice(evt) {
+    this._validate();
+    this.price = evt.target.value;
+    this.rerender();
+  }
+  rerender() {
+    super.rerender();
+    this._applyFlatpickr();
   }
   getData() {
-    const formData = new FormData(this.getElement());
-    return formData;
+    const offers = this.pointModel.getOffers();
+    const offersAll = offers.filter((it) => it.type === this.transport);
+    const offersMarkup = Array.from(this.offer);
+    const offersMarkupFilter = offersMarkup.filter((it) => it.checked === true);
+    let dataOffer = [];
+    for (let it of offersMarkupFilter) {
+      for (let item of offersAll[0].offers) {
+        if (item.title === it.name) {
+          dataOffer.push(item);
+        }
+      }
+    }
+    return {
+      eventType: this.transport,
+      destination: this.city,
+      startTime: parseFormatTime(this.timeStartTrip),
+      endTime: parseFormatTime(this.timeEndTrip),
+      price: this.price,
+      offers: dataOffer,
+    };
   }
-  recoveryListeners() {
-    // this._subscribeOnEvents();
+  recoveryListeners() {}
+  _applyFlatpickr() {
+    if (this._flatpickrStart || this._flatpickrEnd) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+    }
+    const dateElementStaty = this.getElement().querySelector(`#event-start-time-1`);
+    this._flatpickrStart = flatpickr(dateElementStaty, {
+      allowInput: true,
+      dateFormat: `d/m/y H:i`,
+      defaultDate: this.timeStartTrip,
+    });
+    const dateElementEnd = this.getElement().querySelector(`#event-end-time-1`);
+    this._flatpickrEnd = flatpickr(dateElementEnd, {
+      allowInput: true,
+      dateFormat: `d/m/y H:i`,
+      defaultDate: this.timeEndTrip,
+    });
+  }
+  changeCity(evt) {
+    this._validate();
+    this.city = evt.target.value;
+    this.visualDest = ``;
+    this.rerender();
+  }
+  startTrip(evt) {
+    this.timeStartTrip = evt.target.value;
+    this.rerender();
+  }
+  endTrip(evt) {
+    this.timeEndTrip = evt.target.value;
+    this.rerender();
   }
   saveTrip() {}
   delete() {}
+  getOffers(elements) {
+    this.offer = elements;
+    this.rerender();
+  }
   changeTypeTransport(evt) {
+    this._validate();
     this.transport = evt.target.value;
     this.visual = ``;
     this.rerender();
@@ -148,5 +277,28 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     this._element.querySelector(`.event__reset-btn `).addEventListener(`click`, (evt) => {
       this.delete(evt);
     });
+    this._element.querySelector(`.event__input--price`).addEventListener(`input`, (evt) => {
+      this.validatePrice(evt);
+    });
+    this._element.querySelector(`.event__input--destination`).addEventListener(`input`, (evt) => {
+      this.changeCity(evt);
+    });
+    this._element.querySelector(`.event__input--price`).addEventListener(`change`, (evt) => {
+      this.getPrice(evt);
+    });
+    this._element.querySelector(`#event-start-time-1`).addEventListener(`input`, (evt) => {
+      this.startTrip(evt);
+    });
+    this._element.querySelector(`#event-end-time-1`).addEventListener(`input`, (evt) => {
+      this.endTrip(evt);
+    });
+    if (this._element.querySelectorAll(`.event__offer-checkbox`).length > 0) {
+      const elOff = this._element.querySelectorAll(`.event__offer-checkbox`);
+      for (let it of elOff) {
+        it.addEventListener(`change`, () => {
+          this.getOffers(elOff);
+        });
+      }
+    }
   }
 }

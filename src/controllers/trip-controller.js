@@ -68,8 +68,6 @@ export default class TripController {
     });
     this._onDataChange(this.trips, saveTrip);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    replace(this.tripEvent, this.editEvent);
-    this._mode = Mode.DEFAULT;
   }
   _replaceEventToEdit() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);

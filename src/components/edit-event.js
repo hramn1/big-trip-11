@@ -143,6 +143,7 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     this.transport = trip.type;
     this.priceTrip = trip.price;
     this.city = trip.city;
+    this.offer = ``;
     this._applyFlatpickr();
   }
 

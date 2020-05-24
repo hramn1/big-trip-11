@@ -36,6 +36,7 @@ filterController.render();
 render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
 
 const startApplication = (points, cities, offers) => {
+  const sortedDefault = [...points].sort((tripsSecond, tripsFirst) => tripsSecond.tripDate - tripsFirst.tripDate);
   unrender(loader);
   for (let i = 0; i < TOTALTRIP; i++) {
     arrTrip.push(generateTripData());
@@ -44,7 +45,7 @@ const startApplication = (points, cities, offers) => {
     unrender(templateInfoRoute);
     render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
   });
-  pointModel.setPoints(points);
+  pointModel.setPoints(sortedDefault);
   pointModel.setCities(cities);
   pointModel.setOffers(offers);
 
