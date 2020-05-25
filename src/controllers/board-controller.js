@@ -65,7 +65,7 @@ export default class BoardController {
     this._onViewChange();
   }
   _onViewChange() {
-    this.newEventController.setDefaultviev();
+    this.newEventController.setDefaultViev();
     this._showedTripControllers.forEach((controller) => controller.setDefaultView());
   }
   _onViewChangeNewTrip() {

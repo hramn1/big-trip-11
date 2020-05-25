@@ -4,8 +4,7 @@ import {default as Statistics} from "./components/statistics.js";
 import {default as BoardController} from './controllers/board-controller';
 import {default as FilterController} from './controllers/filter-controller';
 import {default as LoadingTemplate} from './components/loading';
-import {generateTripData} from './data';
-import {render, TOTALTRIP, Position, unrender, AUTHORIZATION, END_POINT} from "./utils";
+import {render, Position, unrender, AUTHORIZATION, END_POINT} from "./utils";
 import {default as PointModel} from "./models/points";
 import API from "./api";
 
@@ -39,9 +38,6 @@ const startApplication = (points, cities, offers) => {
   const sortedDefault = [...points].sort((tripsSecond, tripsFirst) => tripsSecond.tripDate - tripsFirst.tripDate);
   unrender(loader);
   document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
-  for (let i = 0; i < TOTALTRIP; i++) {
-    arrTrip.push(generateTripData());
-  }
   pointModel.setDataChangeHandler(() => {
     unrender(templateInfoRoute);
     render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);

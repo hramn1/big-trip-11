@@ -1,9 +1,23 @@
-export const TOTALTRIP = 2;
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTER: `after`
 };
+export const TRANSFER_EVENT_TYPES = [
+  `taxi`,
+  `bus`,
+  `train`,
+  `ship`,
+  `transport`,
+  `drive`,
+  `flight`
+];
+
+export const ACTIVITY_EVENT_TYPES = [
+  `check-in`,
+  `sightseeing`,
+  `restaurant`
+];
 export const AUTHORIZATION = `Basic er883jdzbdwh`;
 export const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 export const MONTH_NAMES = [
@@ -94,6 +108,7 @@ export const getPreTitleCity = (point) => {
     return `to`;
   }
 };
+
 export const limitDayMouth = (countOfMouth) => {
   if (countOfMouth === 1) {
     return 28;

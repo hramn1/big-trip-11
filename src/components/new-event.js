@@ -1,5 +1,5 @@
 import {default as AbstractSmartComponent} from "./abstract-smart";
-import {getPreTitleCity, getCappitlize, parseFormatTime, generateId} from "../utils";
+import {getPreTitleCity, getCappitlize, parseFormatTime, generateId, TRANSFER_EVENT_TYPES, ACTIVITY_EVENT_TYPES} from "../utils";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import {encode} from "he";
@@ -36,8 +36,8 @@ const getTemplateFormCreate = (pointModel, transport, visual, visualDest, saveBt
       </div>`
     );
   };
-  const typeTransportMarkup = typesTransport.slice(0, 7).map((it) => typeTransport(it)).join(`\n`);
-  const typeActivityMarkup = typesTransport.slice(7).map((it) => typeTransport(it)).join(`\n`);
+  const typeTransportMarkup = typesTransport.filter((item) => TRANSFER_EVENT_TYPES.includes(item)).map((it) => typeTransport(it)).join(`\n`);
+  const typeActivityMarkup = typesTransport.filter((item) => ACTIVITY_EVENT_TYPES.includes(item)).map((it) => typeTransport(it)).join(`\n`);
   // // Офер
   const getOffers = (it) => {
     let isChecked = ``;
@@ -158,9 +158,9 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     this.price = ``;
     this.offer = ``;
     this._flatpickrStart = null;
-    this.timeStartTrip = `20/05/20 00:00`;
+    this.timeStartTrip = new Date();
     this._flatpickrEnd = null;
-    this.timeEndTrip = `22/05/20 00:00`;
+    this.timeEndTrip = new Date();
     this._applyFlatpickr();
 
   }
@@ -183,13 +183,13 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     }
   }
 
-  validatePrice(evt) {
+  _validatePrice(evt) {
     if (isNaN(evt.target.value)) {
       evt.target.value = evt.target.value.replace(/[^0-9]/g, ``);
     }
   }
 
-  getPrice(evt) {
+  _getPrice(evt) {
     this._validate();
     this.price = evt.target.value;
     this.rerender();
@@ -213,12 +213,13 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     }
     return {
       id: generateId(),
-      eventType: this.transport,
-      destination: this.city,
-      startTime: parseFormatTime(this.timeStartTrip),
-      endTime: parseFormatTime(this.timeEndTrip),
-      price: this.price,
+      type: this.transport,
+      city: this.city,
+      tripDate: parseFormatTime(this.timeStartTrip),
+      tripDateEnd: parseFormatTime(this.timeEndTrip),
+      price: Number(this.price),
       offers: dataOffer,
+      favorites: false,
     };
   }
   recoveryListeners() {}
@@ -242,63 +243,62 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
       defaultDate: this.timeEndTrip,
     });
   }
-  changeCity(evt) {
+  _changeCity(evt) {
     this._validate();
     this.city = evt.target.value;
     this.visualDest = ``;
     this.rerender();
   }
-  startTrip(evt) {
+  _startTrip(evt) {
     this.timeStartTrip = evt.target.value;
     this.rerender();
   }
-  endTrip(evt) {
+  _endTrip(evt) {
     this.timeEndTrip = evt.target.value;
     this.rerender();
   }
   saveTrip() {}
   delete() {}
-  getOffers(elements) {
+  _getOffers(elements) {
     this.offer = elements;
     this.rerender();
   }
-  changeTypeTransport(evt) {
+  _changeTypeTransport(evt) {
     this.transport = evt.target.value;
     this._validate();
     this.visual = ``;
     this.rerender();
-
   }
   bind() {
     this._element.querySelector(`.event__save-btn `).addEventListener(`click`, (evt) => {
       this.saveTrip(evt, this.getData());
     });
     this._element.querySelector(`.event__type-list`).addEventListener(`change`, (evt) => {
-      this.changeTypeTransport(evt);
+      this._changeTypeTransport(evt);
     });
     this._element.querySelector(`.event__reset-btn `).addEventListener(`click`, (evt) => {
       this.delete(evt);
     });
     this._element.querySelector(`.event__input--price`).addEventListener(`input`, (evt) => {
-      this.validatePrice(evt);
+      this._validatePrice(evt);
     });
     this._element.querySelector(`.event__input--destination`).addEventListener(`input`, (evt) => {
-      this.changeCity(evt);
+      this._changeCity(evt);
     });
     this._element.querySelector(`.event__input--price`).addEventListener(`change`, (evt) => {
-      this.getPrice(evt);
+      this._getPrice(evt);
     });
     this._element.querySelector(`#event-start-time-1`).addEventListener(`input`, (evt) => {
-      this.startTrip(evt);
+      this._startTrip(evt);
     });
     this._element.querySelector(`#event-end-time-1`).addEventListener(`input`, (evt) => {
-      this.endTrip(evt);
+      this._endTrip(evt);
     });
     if (this._element.querySelectorAll(`.event__offer-checkbox`).length > 0) {
       const elOff = this._element.querySelectorAll(`.event__offer-checkbox`);
       for (let it of elOff) {
         it.addEventListener(`change`, () => {
-          this.getOffers(elOff);
+          this._getOffers(elOff);
         });
       }
     }

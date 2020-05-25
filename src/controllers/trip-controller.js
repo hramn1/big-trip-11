@@ -54,25 +54,25 @@ export default class TripController {
     this._onDataChange(this.trips, null);
   }
   _saveTrip(newObj) {
-    let saveTrip = Object.defineProperty(this.trips, `favorites`, {
+    const saveTrip = Object.defineProperty(this.trips, `favorites`, {
       value: newObj.tripFavor
     });
-    saveTrip = Object.defineProperty(this.trips, `type`, {
+    Object.defineProperty(saveTrip, `type`, {
       value: newObj.transport
     });
-    saveTrip = Object.defineProperty(this.trips, `price`, {
+    Object.defineProperty(saveTrip, `price`, {
       value: Number(newObj.priceTrip)
     });
-    saveTrip = Object.defineProperty(this.trips, `city`, {
+    Object.defineProperty(saveTrip, `city`, {
       value: newObj.city
     });
-    saveTrip = Object.defineProperty(this.trips, `offers`, {
+    Object.defineProperty(saveTrip, `offers`, {
       value: newObj.offer
     });
-    saveTrip = Object.defineProperty(this.trips, `tripDate`, {
+    Object.defineProperty(saveTrip, `tripDate`, {
       value: parseFormatTime(newObj.timeStartTrip)
     });
-    saveTrip = Object.defineProperty(this.trips, `tripDateEnd`, {
+    Object.defineProperty(saveTrip, `tripDateEnd`, {
       value: parseFormatTime(newObj.timeEndTrip)
     });
     this._onDataChange(this.trips, saveTrip);

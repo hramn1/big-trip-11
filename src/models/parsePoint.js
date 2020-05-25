@@ -34,29 +34,5 @@ export default class ModelPoint {
   static parsePoints(data) {
     return data.map(ModelPoint.parsePoint);
   }
-  static toRAWPoint(data) {
-    return {
-      "base_price": 1100,
-      "date_from": "2019-07-10T22:55:56.845Z",
-      "date_to": "2019-07-11T11:22:13.375Z",
-      'destination': {
-        'pictures': "webpack:///src/api.js",
-        'description': data.description,
-        'name': data.city,
-      },
-      "id": "0",
-      "is_favorite": false,
-      "offers": [
-      {
-        "title": "Choose meal",
-        "price": 180
-      }, {
-        "title": "Upgrade to comfort class",
-        "price": 50
-      }
-    ],
-      "type": "bus"
-    }
-  }
 }
 
