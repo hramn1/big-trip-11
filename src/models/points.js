@@ -13,9 +13,6 @@ export default class Points {
     return this._points;
   }
   getPoints() {
-    // if (getPointsByFilter(this.getPointsAllAscOrdered(), this._activeFilterType).length === 0) {
-    //   return this._points;
-    // }
     return getPointsByFilter(this.getPointsAllAscOrdered(), this._activeFilterType);
   }
   getCities() {

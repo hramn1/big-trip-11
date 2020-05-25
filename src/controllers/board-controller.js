@@ -3,7 +3,7 @@ import {default as CreateNoEventTemplate} from "../components/no-event";
 import {default as CreateSort} from "../components/sort";
 import {default as CreateSortContainer} from "../components/sort-container";
 import {default as CreateFilterTemplate} from "../components/filters";
-import {generateSort, generateTripData} from "../data";
+import {generateSort} from "../data";
 import {default as CreateTripDays} from "../components/trip-days";
 import {default as TripController} from "./trip-controller";
 import {default as NewEventController} from "./new-event-controller";
@@ -48,6 +48,10 @@ export default class BoardController {
   init() {
     const trips = this._pointModel.getPoints();
     this.templatePointRouteList = new CreateTripDays(this._pointModel.getPoints());
+    if (this.newEventController === null) {
+      this.newEventController = new NewEventController(this.container, trips, this._statisticsComponent, this._templateMenu, this._pointModel, this._onDataChange, this._onViewChangeNewTrip);
+      this.newEventController.bind();
+    }
     if (trips.length === 0) {
       render(this.container, this.createNoEventTemplate.getElement());
       return;
@@ -55,18 +59,20 @@ export default class BoardController {
       unrender(this.createNoEventTemplate);
     }
     this._onSortEvent(this.templatePointRouteList);
-    if (this.newEventController === null) {
-      this.newEventController = new NewEventController(this.container, generateTripData(), this._statisticsComponent, this._templateMenu, this._onDataChange, this._onViewChangeNewTrip);
-      this.newEventController.bind();
-    }
+
     const newEvent = renderTemplatePointRouteList(this.container, trips, this._pointModel, this.templatePointRouteList, this._onDataChange, this._onViewChange);
     this._showedTripControllers = this._showedTripControllers.concat(newEvent);
     this._onViewChange();
   }
   _onViewChange() {
+    this.newEventController.setDefaultviev();
     this._showedTripControllers.forEach((controller) => controller.setDefaultView());
   }
   _onViewChangeNewTrip() {
+    const trips = this._pointModel.getPoints();
+    if (trips.length === 0) {
+      return;
+    }
     this._showedTripControllers.forEach((controller) => controller.setDefaultView());
     this._setSortStateDefault();
     this._pointModel.setFilter(`Everything`);
@@ -141,24 +147,36 @@ export default class BoardController {
 
   }
   _onDataChange(oldData, newData) {
+    const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
     if (newData === null) {
       this._api.deletePoint(oldData.id)
         .then(() => {
           this._pointModel.removePoint(oldData.id);
           this._updatePoints();
+        })
+        .catch(() => {
+          pointController.shake();
         });
 
     } else if (oldData === null) {
-      this._pointModel.addPoint(newData);
-      this._updatePoints();
+      this._api.createPoint(newData)
+        .then(() => {
+          this._pointModel.addPoint(newData);
+          this._updatePoints();
+
+        })
+        .catch(() => {
+          this.newEventController.shake();
+        });
     } else {
-      const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
       this._api.updatePoint(oldData.id, newData)
         .then(() => {
           this._pointModel.updatePoint(oldData.id, newData);
-          pointController.init(newData);
           this._updatePoints();
-        });
+        })
+      .catch(() => {
+        pointController.shake();
+      });
     }
   }
 }

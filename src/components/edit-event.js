@@ -4,7 +4,7 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import {encode} from "he";
 
-const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city) => {
+const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city, timeStartTrip, timeEndTrip, offer, saveBtn) => {
 
   const isFavorite = (tripFavor) ? ` checked` : ``;
   const offers = pointModel.getOffers();
@@ -26,11 +26,11 @@ const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city) =>
   const typeActivityMarkup = typesTransport.slice(7).map((it) => typeTransport(it)).join(`\n`);
   // Офер
   const getOffers = (it) => {
-    const offerTittleChecked = trip.offers.map((item) => item.title);
+    const offerTittleChecked = offer.map((item) => item.title);
     const isChecked = (offerTittleChecked.some((elem) => elem === it.title)) ? ` checked` : ``;
     return `
   <div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${it.title}" type="checkbox" name="event-offer-${it.title}" ${isChecked}>
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${it.title}" type="checkbox" name="${it.title}" ${isChecked}>
     <label class="event__offer-label" for="event-offer-${it.title}">
       <span class="event__offer-title">${it.title}</span>
       &plus;
@@ -88,12 +88,12 @@ const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city) =>
                       <label class="visually-hidden" for="event-start-time-${trip.id}">
                         From
                       </label>
-                      <input class="event__input  event__input--time" id="event-start-time-${trip.id}" type="text" name="event-start-time" value="${trip.tripDate}">
+                      <input class="event__input  event__input--time" id="event-start-time-${trip.id}" type="text" name="event-start-time" value="${timeStartTrip}">
                       &mdash;
                       <label class="visually-hidden" for="event-end-time-${trip.id}">
                         To
                       </label>
-                      <input class="event__input  event__input--time" id="event-end-time-${trip.id}" type="text" name="event-end-time" value="${trip.tripDateEnd}">
+                      <input class="event__input  event__input--time" id="event-end-time-${trip.id}" type="text" name="event-end-time" value="${timeEndTrip}">
                     </div>
 
                     <div class="event__field-group  event__field-group--price">
@@ -104,7 +104,7 @@ const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city) =>
                       <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${(price)}">
                     </div>
 
-                    <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                    <button class="event__save-btn  btn  btn--blue" ${saveBtn} type="submit">Save</button>
                     <button class="event__reset-btn" type="reset">Delete</button>
 
                     <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite}>
@@ -143,17 +143,22 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     this.transport = trip.type;
     this.priceTrip = trip.price;
     this.city = trip.city;
+    this.offer = trip.offers;
+    this._flatpickrStart = null;
+    this.timeStartTrip = trip.tripDate;
+    this._flatpickrEnd = null;
+    this.timeEndTrip = trip.tripDateEnd;
+    this.saveBtn = ``;
+
     this._applyFlatpickr();
   }
 
   getTemplate() {
-    return editEventMarkup(this.trip, this.pointModel, this.tripFavor, this.transport, this.priceTrip, this.city);
+    return editEventMarkup(this.trip, this.pointModel, this.tripFavor, this.transport, this.priceTrip, this.city, this.timeStartTrip, this.timeEndTrip, this.offer, this.saveBtn);
   }
 
 
-  recoveryListeners() {
-    // this._subscribeOnEvents();
-  }
+  recoveryListeners() {}
 
   rerender() {
     super.rerender();
@@ -165,6 +170,9 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     this.transport = this.trip.type;
     this.priceTrip = this.trip.price;
     this.city = this.trip.city;
+    this.timeStartTrip = this.trip.tripDate;
+    this.timeEndTrip = this.trip.tripDateEnd;
+    this.offer = this.trip.offers;
     this.rerender();
   }
 
@@ -182,26 +190,18 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     this._flatpickrStart = flatpickr(dateElementStaty, {
       allowInput: true,
       dateFormat: `d/m/y H:i`,
-      defaultDate: this.trip.tripDate,
+      defaultDate: this.timeStartTrip,
     });
     const dateElementEnd = this.getElement().querySelector(`#event-end-time-${this.trip.id}`);
     this._flatpickrEnd = flatpickr(dateElementEnd, {
       allowInput: true,
       dateFormat: `d/m/y H:i`,
-      defaultDate: this.trip.tripDateEnd,
+      defaultDate: this.timeEndTrip,
     });
   }
-
-  // _subscribeOnEvents() {
-  //   const element = this.getElement();
-  //
-  //   element.querySelector(`.event__rollup-btn`)
-  //     .addEventListener(`click`, () => {
-  //       this.rerender();
-  //     });
-  // }
   changeTypeTransport(evt) {
     this.transport = evt.target.value;
+    this._validate();
     this.rerender();
   }
 
@@ -214,11 +214,51 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     if (isNaN(evt.target.value)) {
       evt.target.value = evt.target.value.replace(/[^0-9]/g, ``);
     }
+  }
+  getPrice(evt) {
+    this._validate();
     this.priceTrip = evt.target.value;
+    this.rerender();
+  }
+  _validate() {
+    const cities = this.pointModel.getCities();
+    const cityDest = cities.map((it) => it.name);
+    const priceTrip = this._element.querySelector(`.event__input--price`).value;
+    const cityTrip = this._element.querySelector(`.event__input--destination`).value;
+
+    const cityTripValidate = cityDest.some((el) => el === cityTrip);
+    if (priceTrip !== `0` && priceTrip !== `` && cityTripValidate) {
+      this.saveBtn = ``;
+    } else {
+      this.saveBtn = `disabled`;
+    }
   }
 
   changeCity(evt) {
+    this._validate();
     this.city = evt.target.value;
+    this.rerender();
+  }
+  startTrip(evt) {
+    this.timeStartTrip = evt.target.value;
+    this.rerender();
+  }
+  getOffers(elements) {
+    const offers = this.pointModel.getOffers();
+    const offersAll = offers.filter((it) => it.type === this.transport);
+    const offersMarkup = Array.from(elements).filter((it) => it.checked);
+    let dataOffer = [];
+    for (let it of offersMarkup) {
+      for (let item of offersAll[0].offers) {
+        if (item.title === it.name) {
+          dataOffer.push(item);
+        }
+      }
+    }
+    this.offer = dataOffer;
+  }
+  endTrip(evt) {
+    this.timeEndTrip = evt.target.value;
     this.rerender();
   }
   deleteTrip() {}
@@ -245,8 +285,25 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     this._element.querySelector(`.event__input--price`).addEventListener(`input`, (evt) => {
       this.validatePrice(evt);
     });
+    this._element.querySelector(`.event__input--price`).addEventListener(`change`, (evt) => {
+      this.getPrice(evt);
+    });
     this._element.querySelector(`.event__input--destination`).addEventListener(`change`, (evt) => {
       this.changeCity(evt);
     });
+    this._element.querySelector(`#event-start-time-${this.trip.id}`).addEventListener(`input`, (evt) => {
+      this.startTrip(evt);
+    });
+    this._element.querySelector(`#event-end-time-${this.trip.id}`).addEventListener(`input`, (evt) => {
+      this.endTrip(evt);
+    });
+    if (this._element.querySelectorAll(`.event__offer-checkbox`).length > 0) {
+      const elOff = this._element.querySelectorAll(`.event__offer-checkbox`);
+      for (let it of elOff) {
+        it.addEventListener(`change`, () => {
+          this.getOffers(elOff);
+        });
+      }
+    }
   }
 }
