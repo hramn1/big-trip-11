@@ -9,6 +9,7 @@ export default class NewEventController {
     this._statisticsComponent = statisticsComponent;
     this._templateMenu = templateMenu;
     this.templateFormCreate = null;
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
   bind() {
     document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, ()=>{
@@ -27,6 +28,7 @@ export default class NewEventController {
     this._statisticsComponent.hide();
     this._templateMenu.setDefault();
     this.templateFormCreate = new CreateFormNewEventTemplate(this.pointModel);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
 
     let container = document.querySelector(`.trip-events__trip-sort`);
     if (container === null) {
@@ -49,12 +51,30 @@ export default class NewEventController {
     this.setDefaultviev();
   }
   setDefaultviev() {
-    unrender(this.templateFormCreate);
-    this.templateFormCreate = null;
+    if (this.templateFormCreate) {
+      unrender(this.templateFormCreate);
+      this.templateFormCreate = null;
+    }
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+  _onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    if (isEscKey) {
+      this.setDefaultviev();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
+  }
+  shake() {
+    const removeShake = () => {
+      this.templateFormCreate.getElement().classList.remove(`shake`);
+    };
+    this.templateFormCreate.getElement().classList.add(`shake`);
+    setTimeout(removeShake, 2000);
   }
   saveTrip() {
     const newObj = this.templateFormCreate.getData();
-    const trip = this.trips[0];
+    const trip = Object.create(this.trips[0]);
+    this.templateFormCreate.getElement().querySelector(`.event__save-btn`).textContent = `Saving`;
 
     let saveTrip = Object.defineProperty(trip, `favorites`, {
       value: false
@@ -76,6 +96,9 @@ export default class NewEventController {
     });
     saveTrip = Object.defineProperty(trip, `offers`, {
       value: newObj.offers
+    });
+    saveTrip = Object.defineProperty(trip, `id`, {
+      value: newObj.id
     });
     this._onDataChange(null, saveTrip);
   }

@@ -1,6 +1,7 @@
 import {default as CreatePointRoute} from '../components/route-point';
 import {default as CreateEditEven} from '../components/edit-event';
-import {render, replace, unrender} from "../utils";
+
+import {parseFormatTime, render, replace, unrender} from "../utils";
 
 const Mode = {
   DEFAULT: `default`,
@@ -19,7 +20,6 @@ export default class TripController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
   init(trip) {
-
     this.trips = trip;
     const oldETrip = this.tripEvent;
     const oldEditEvent = this.editEvent;
@@ -66,6 +66,15 @@ export default class TripController {
     saveTrip = Object.defineProperty(this.trips, `city`, {
       value: newObj.city
     });
+    saveTrip = Object.defineProperty(this.trips, `offers`, {
+      value: newObj.offer
+    });
+    saveTrip = Object.defineProperty(this.trips, `tripDate`, {
+      value: parseFormatTime(newObj.timeStartTrip)
+    });
+    saveTrip = Object.defineProperty(this.trips, `tripDateEnd`, {
+      value: parseFormatTime(newObj.timeEndTrip)
+    });
     this._onDataChange(this.trips, saveTrip);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
@@ -89,6 +98,13 @@ export default class TripController {
       this._replaceEventToEdit();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
+  }
+  shake() {
+    const removeShake = () => {
+      this.editEvent.getElement().classList.remove(`shake`);
+    };
+    this.editEvent.getElement().classList.add(`shake`);
+    setTimeout(removeShake, 2000);
   }
   destroy() {
     unrender(this.tripEvent);

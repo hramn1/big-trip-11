@@ -65,6 +65,7 @@ export default class BoardController {
     this._onViewChange();
   }
   _onViewChange() {
+    this.newEventController.setDefaultviev();
     this._showedTripControllers.forEach((controller) => controller.setDefaultView());
   }
   _onViewChangeNewTrip() {
@@ -146,26 +147,36 @@ export default class BoardController {
 
   }
   _onDataChange(oldData, newData) {
+    const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
     if (newData === null) {
       this._api.deletePoint(oldData.id)
         .then(() => {
           this._pointModel.removePoint(oldData.id);
           this._updatePoints();
+        })
+        .catch(() => {
+          pointController.shake();
         });
 
     } else if (oldData === null) {
       this._api.createPoint(newData)
         .then(() => {
           this._pointModel.addPoint(newData);
-          this.newEventController.setDefaultviev();
           this._updatePoints();
+
+        })
+        .catch(() => {
+          this.newEventController.shake();
         });
     } else {
       this._api.updatePoint(oldData.id, newData)
         .then(() => {
           this._pointModel.updatePoint(oldData.id, newData);
           this._updatePoints();
-        });
+        })
+      .catch(() => {
+        pointController.shake();
+      });
     }
   }
 }

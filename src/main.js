@@ -16,7 +16,7 @@ const tripMainContainer = document.querySelector(`.trip-main`);
 
 const loader = new LoadingTemplate();
 render(mainContent, loader.getElement());
-
+document.querySelector(`.trip-main__event-add-btn`).setAttribute(`disabled`, `disabled`);
 const arrTrip = [];
 const api = new API(END_POINT, AUTHORIZATION);
 const pointModel = new PointModel();
@@ -38,6 +38,7 @@ render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
 const startApplication = (points, cities, offers) => {
   const sortedDefault = [...points].sort((tripsSecond, tripsFirst) => tripsSecond.tripDate - tripsFirst.tripDate);
   unrender(loader);
+  document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
   for (let i = 0; i < TOTALTRIP; i++) {
     arrTrip.push(generateTripData());
   }

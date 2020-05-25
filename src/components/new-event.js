@@ -1,5 +1,5 @@
 import {default as AbstractSmartComponent} from "./abstract-smart";
-import {getPreTitleCity, getCappitlize, parseFormatTime} from "../utils";
+import {getPreTitleCity, getCappitlize, parseFormatTime, generateId} from "../utils";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import {encode} from "he";
@@ -212,6 +212,7 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
       }
     }
     return {
+      id: generateId(),
       eventType: this.transport,
       destination: this.city,
       startTime: parseFormatTime(this.timeStartTrip),
@@ -262,10 +263,11 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     this.rerender();
   }
   changeTypeTransport(evt) {
-    this._validate();
     this.transport = evt.target.value;
+    this._validate();
     this.visual = ``;
     this.rerender();
+
   }
   bind() {
     this._element.querySelector(`.event__save-btn `).addEventListener(`click`, (evt) => {
