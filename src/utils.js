@@ -1,10 +1,24 @@
-export const TOTALTRIP = 2;
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTER: `after`
 };
-export const AUTHORIZATION = `Basic er883jdzbdwss`;
+export const TRANSFER_EVENT_TYPES = [
+  `taxi`,
+  `bus`,
+  `train`,
+  `ship`,
+  `transport`,
+  `drive`,
+  `flight`
+];
+
+export const ACTIVITY_EVENT_TYPES = [
+  `check-in`,
+  `sightseeing`,
+  `restaurant`
+];
+export const AUTHORIZATION = `Basic er883jdzbdwh`;
 export const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 export const MONTH_NAMES = [
   `JAN`,
@@ -94,6 +108,7 @@ export const getPreTitleCity = (point) => {
     return `to`;
   }
 };
+
 export const limitDayMouth = (countOfMouth) => {
   if (countOfMouth === 1) {
     return 28;
@@ -106,4 +121,21 @@ export const limitDayMouth = (countOfMouth) => {
 export const getCappitlize = (str) => {
   const firstWord = str[0].toUpperCase();
   return str.replace(str[0], firstWord);
+};
+export const parseFormatTime = (timeText) => {
+  if (!isNaN(new Date(timeText))) {
+    return timeText;
+  } else {
+    // в формате DD/MM/YY hh:mm
+    const newDate = new Date();
+
+    newDate.setFullYear(2000 + parseInt(timeText.slice(6, 8), 10), parseInt(timeText.slice(3, 5), 10) - 1, parseInt(timeText.slice(0, 2), 10));
+
+    newDate.setHours(parseInt(timeText.slice(9, 11), 10), parseInt(timeText.slice(12, 14), 10), 0, 0);
+
+    return newDate;
+  }
+};
+export const generateId = () => {
+  return String(30 + Math.floor(Math.random() * 10));
 };

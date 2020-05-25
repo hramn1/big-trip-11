@@ -37,15 +37,15 @@ const API = class {
       .then((response) => response.json());
   }
 
-  createPoint(point) {
+  createPoint(data) {
     return this._load({
       url: `points`,
       method: Method.POST,
-      body: JSON.stringify(point.toRAW()),
-      headers: new Headers({"Contyent-Type": `application/json`})
+      // body: JSON.stringify(ModelPoint.toRAWPoint(point))
+      body: JSON.stringify(data.toRAW()),
+      headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json());
-    // .then(Point.parsePoint);
   }
 
   updatePoint(id, data) {

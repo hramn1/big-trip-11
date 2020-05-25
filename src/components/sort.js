@@ -35,8 +35,7 @@ export default class CreateSort extends AbstractComponent {
     return getTemplateSort(this.sort);
   }
 
-  sortEvent() {
-  }
+  sortEvent() {}
 
   unrenderDay() {
     this._element.querySelector(`.trip-sort__item--day`).textContent = ``;

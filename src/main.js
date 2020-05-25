@@ -4,8 +4,7 @@ import {default as Statistics} from "./components/statistics.js";
 import {default as BoardController} from './controllers/board-controller';
 import {default as FilterController} from './controllers/filter-controller';
 import {default as LoadingTemplate} from './components/loading';
-import {generateTripData} from './data';
-import {render, TOTALTRIP, Position, unrender, AUTHORIZATION, END_POINT} from "./utils";
+import {render, Position, unrender, AUTHORIZATION, END_POINT} from "./utils";
 import {default as PointModel} from "./models/points";
 import API from "./api";
 
@@ -16,7 +15,7 @@ const tripMainContainer = document.querySelector(`.trip-main`);
 
 const loader = new LoadingTemplate();
 render(mainContent, loader.getElement());
-
+document.querySelector(`.trip-main__event-add-btn`).setAttribute(`disabled`, `disabled`);
 const arrTrip = [];
 const api = new API(END_POINT, AUTHORIZATION);
 const pointModel = new PointModel();
@@ -36,15 +35,14 @@ filterController.render();
 render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
 
 const startApplication = (points, cities, offers) => {
+  const sortedDefault = [...points].sort((tripsSecond, tripsFirst) => tripsSecond.tripDate - tripsFirst.tripDate);
   unrender(loader);
-  for (let i = 0; i < TOTALTRIP; i++) {
-    arrTrip.push(generateTripData());
-  }
+  document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
   pointModel.setDataChangeHandler(() => {
     unrender(templateInfoRoute);
     render(tripMainContainer, templateInfoRoute.getElement(), Position.AFTERBEGIN);
   });
-  pointModel.setPoints(points);
+  pointModel.setPoints(sortedDefault);
   pointModel.setCities(cities);
   pointModel.setOffers(offers);
 

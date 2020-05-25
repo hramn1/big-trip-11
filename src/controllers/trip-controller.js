@@ -1,6 +1,7 @@
 import {default as CreatePointRoute} from '../components/route-point';
 import {default as CreateEditEven} from '../components/edit-event';
-import {render, replace, unrender} from "../utils";
+
+import {parseFormatTime, render, replace, unrender} from "../utils";
 
 const Mode = {
   DEFAULT: `default`,
@@ -19,7 +20,6 @@ export default class TripController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
   init(trip) {
-
     this.trips = trip;
     const oldETrip = this.tripEvent;
     const oldEditEvent = this.editEvent;
@@ -54,22 +54,29 @@ export default class TripController {
     this._onDataChange(this.trips, null);
   }
   _saveTrip(newObj) {
-    let saveTrip = Object.defineProperty(this.trips, `favorites`, {
+    const saveTrip = Object.defineProperty(this.trips, `favorites`, {
       value: newObj.tripFavor
     });
-    saveTrip = Object.defineProperty(this.trips, `type`, {
+    Object.defineProperty(saveTrip, `type`, {
       value: newObj.transport
     });
-    saveTrip = Object.defineProperty(this.trips, `price`, {
+    Object.defineProperty(saveTrip, `price`, {
       value: Number(newObj.priceTrip)
     });
-    saveTrip = Object.defineProperty(this.trips, `city`, {
+    Object.defineProperty(saveTrip, `city`, {
       value: newObj.city
+    });
+    Object.defineProperty(saveTrip, `offers`, {
+      value: newObj.offer
+    });
+    Object.defineProperty(saveTrip, `tripDate`, {
+      value: parseFormatTime(newObj.timeStartTrip)
+    });
+    Object.defineProperty(saveTrip, `tripDateEnd`, {
+      value: parseFormatTime(newObj.timeEndTrip)
     });
     this._onDataChange(this.trips, saveTrip);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    replace(this.tripEvent, this.editEvent);
-    this._mode = Mode.DEFAULT;
   }
   _replaceEventToEdit() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
@@ -91,6 +98,13 @@ export default class TripController {
       this._replaceEventToEdit();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
+  }
+  shake() {
+    const removeShake = () => {
+      this.editEvent.getElement().classList.remove(`shake`);
+    };
+    this.editEvent.getElement().classList.add(`shake`);
+    setTimeout(removeShake, 2000);
   }
   destroy() {
     unrender(this.tripEvent);

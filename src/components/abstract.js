@@ -2,7 +2,6 @@ import {createElement} from "../utils.js";
 
 const HIDDEN_CLASS = `visually-hidden`;
 
-
 export default class AbstractComponent {
   constructor() {
     if (new.target === AbstractComponent) {

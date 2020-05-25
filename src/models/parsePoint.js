@@ -14,8 +14,8 @@ export default class ModelPoint {
   toRAW() {
     return {
       'base_price': this.price,
-      'date_from': this.tripDate.toISOString(),
-      'date_to': this.tripDateEnd.toISOString(),
+      'date_from': new Date(this.tripDate),
+      'date_to': new Date(this.tripDateEnd),
       'destination': {
         'pictures': this.picture,
         'description': this.description,
@@ -34,7 +34,5 @@ export default class ModelPoint {
   static parsePoints(data) {
     return data.map(ModelPoint.parsePoint);
   }
-
-
 }
 
