@@ -15,10 +15,10 @@ const renderTemplatePointRouteList = (container, trips, pointModel, templatePoin
 
   const newEventControllers = [];
 
-  for (let it of routeList) {
+  for (const it of routeList) {
     const dayDateElement = it.getAttribute(`data-day`);
     const showingEvents = trips.filter((trip) => `${trip.tripDate.getMonth()} ${trip.tripDate.getDate()}` === dayDateElement);
-    for (let tripEvent of showingEvents) {
+    for (const tripEvent of showingEvents) {
       const eventController = new TripController(pointModel, it, onDataChange, onViewChange);
       eventController.init(tripEvent);
       eventController.init(tripEvent);
@@ -100,7 +100,7 @@ export default class BoardController {
       unrender(this.templatePointRouteList);
       unrender(this.sortContainer);
       render(this.container, this.sortContainer.getElement());
-      for (let it of trips) {
+      for (const it of trips) {
         const routeList = document.querySelector(`.trip-days__item .trip-events__item `);
         const eventControllerSort = new TripController(this._pointModel, routeList, this._onDataChange, this._onViewChange);
         eventControllerSort.init(it);
@@ -125,7 +125,7 @@ export default class BoardController {
   }
   _setSortStateDefault() {
     unrender(this.createNoEventTemplate);
-    let trips = this._pointModel.getPoints();
+    const trips = this._pointModel.getPoints();
     unrender(this.sortTemplate);
     this.sortTemplate = new CreateSort(generateSort());
     render(this.container, this.sortTemplate.getElement());

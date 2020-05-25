@@ -37,7 +37,7 @@ export default class CreateFilterTemplate extends AbstractComponent {
   }
   static filterDefault() {
     const el = document.querySelectorAll(`.trip-filters__filter-input`);
-    for (let it of el) {
+    for (const it of el) {
       it.checked = false;
     }
   }

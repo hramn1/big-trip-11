@@ -41,7 +41,7 @@ const getTemplateFormCreate = (pointModel, transport, visual, visualDest, saveBt
   // // Офер
   const getOffers = (it) => {
     let isChecked = ``;
-    for (let item of offer) {
+    for (const item of offer) {
       if (it.title === item.name) {
         isChecked = (item.checked) ? `checked` : ``;
       }
@@ -203,9 +203,9 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     const offersAll = offers.filter((it) => it.type === this.transport);
     const offersMarkup = Array.from(this.offer);
     const offersMarkupFilter = offersMarkup.filter((it) => it.checked === true);
-    let dataOffer = [];
-    for (let it of offersMarkupFilter) {
-      for (let item of offersAll[0].offers) {
+    const dataOffer = [];
+    for (const it of offersMarkupFilter) {
+      for (const item of offersAll[0].offers) {
         if (item.title === it.name) {
           dataOffer.push(item);
         }

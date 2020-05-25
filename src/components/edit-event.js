@@ -243,9 +243,9 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     const offers = this.pointModel.getOffers();
     const offersAll = offers.filter((it) => it.type === this.transport);
     const offersMarkup = Array.from(elements).filter((it) => it.checked);
-    let dataOffer = [];
-    for (let it of offersMarkup) {
-      for (let item of offersAll[0].offers) {
+    const dataOffer = [];
+    for (const it of offersMarkup) {
+      for (const item of offersAll[0].offers) {
         if (item.title === it.name) {
           dataOffer.push(item);
         }
@@ -295,7 +295,7 @@ export default class CreateEditEvent extends AbstractSmartComponent {
     });
     if (this._element.querySelectorAll(`.event__offer-checkbox`).length > 0) {
       const elOff = this._element.querySelectorAll(`.event__offer-checkbox`);
-      for (let it of elOff) {
+      for (const it of elOff) {
         it.addEventListener(`change`, () => {
           this._getOffers(elOff);
         });

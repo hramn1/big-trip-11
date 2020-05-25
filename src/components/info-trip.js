@@ -5,8 +5,8 @@ const getTemplateInfoRoute = (trips) => {
   const getTotalPrice = () => {
     let totalPrice = 0;
     let totalPriceOffer = 0;
-    for (let it of trips) {
-      for (let item of it.offers) {
+    for (const it of trips) {
+      for (const item of it.offers) {
         totalPriceOffer += item.price;
       }
       totalPrice += it.price;
@@ -15,11 +15,11 @@ const getTemplateInfoRoute = (trips) => {
     return totalPrice;
   };
   const getVisitedCities = () => {
-    let city = new Set();
-    for (let it of trips) {
+    const city = new Set();
+    for (const it of trips) {
       city.add(it.city);
     }
-    let cityArr = Array.from(city);
+    const cityArr = Array.from(city);
     if (cityArr.length > 3) {
       return `${cityArr[0]} — ... — ${cityArr[cityArr.length - 1]}`;
     } else if (cityArr.length === 2) {

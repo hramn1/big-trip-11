@@ -77,19 +77,19 @@ export const offers = [
   }
 ];
 const generateDesk = () => {
-  let deskStr = generatorRandom.splitStr(tripData.finalDestination.description);
+  const deskStr = generatorRandom.splitStr(tripData.finalDestination.description);
   return deskStr.slice(0, Math.round(generatorRandom.generateRandomNumber(1, 5))).join();
 };
 
 export const generateTripData = () => {
-  let intervalTrip = Math.round(generatorRandom.generateRandomNumber(5, 30));
-  let timeTrip = Math.round(generatorRandom.generateRandomNumber(30, 180));
+  const intervalTrip = Math.round(generatorRandom.generateRandomNumber(5, 30));
+  const timeTrip = Math.round(generatorRandom.generateRandomNumber(30, 180));
   const getNewDateTrip = () => {
-    let tripDate = tripData.beginTrip;
+    const tripDate = tripData.beginTrip;
     return new Date(tripDate.setMinutes(tripDate.getMinutes() + intervalTrip + timeTrip));
   };
   const getEndDateTrip = () => {
-    let tripDate = tripData.beginTrip;
+    const tripDate = tripData.beginTrip;
     return new Date(tripDate.setMinutes(tripDate.getMinutes() + timeTrip));
   };
 

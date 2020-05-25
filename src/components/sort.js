@@ -43,7 +43,7 @@ export default class CreateSort extends AbstractComponent {
 
   bind() {
     const elSort = this._element.querySelectorAll(`.trip-sort__input`);
-    for (let it of elSort) {
+    for (const it of elSort) {
       it.addEventListener(`click`, this.sortEvent);
     }
   }

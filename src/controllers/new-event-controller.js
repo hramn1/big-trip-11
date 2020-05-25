@@ -75,7 +75,7 @@ export default class NewEventController {
     const newObj = this.templateFormCreatej.getData();
     const saveTrip = Object.create(this.trips[0]);
     this.templateFormCreatej.getElement().querySelector(`.event__save-btn`).textContent = `Saving`;
-    for (let key in newObj) {
+    for (const key in newObj) {
       if (Object.prototype.hasOwnProperty.call(newObj, key)) {
         Object.defineProperty(saveTrip, key, {
           value: newObj[key]
