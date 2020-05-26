@@ -3,17 +3,17 @@ import {getPreTitleCity, getCappitlize, parseFormatTime, TRANSFER_EVENT_TYPES, A
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import {encode} from "he";
-const getTemplateFormCreate = (pointModel, transport, visual, visualDest, saveBtn, city, price, timeStartTrip, timeEndTrip, offer) => {
+const getTemplateFormCreate = (pointModel, transport, visual, visualDest, saveBtn, city, price, timeStartTrip, timeEndTrip, offersData) => {
   const conditionSaveBtn = saveBtn;
   document.querySelector(`.trip-main__event-add-btn`).removeAttribute(`disabled`);
   const offers = pointModel.getOffers();
   const cities = pointModel.getCities();
-  const dest = cities.filter((it) => it.name === city);
+  const citiesDestination = cities.filter((it) => it.name === city);
   let cityDescr = ``;
-  let cityPhoto = [];
-  if (dest.length > 0) {
-    cityDescr = dest[0].description;
-    cityPhoto = dest[0].pictures;
+  let cityPhotos = [];
+  if (citiesDestination.length > 0) {
+    cityDescr = citiesDestination[0].description;
+    cityPhotos = citiesDestination[0].pictures;
   }
   const getTemplatePhoto = (it) =>{
     return (
@@ -21,7 +21,7 @@ const getTemplateFormCreate = (pointModel, transport, visual, visualDest, saveBt
     );
   };
 
-  const TemplatePhotoMarkup = cityPhoto.map((it) => getTemplatePhoto(it)).join(`\n`);
+  const templatePhotoMarkup = cityPhotos.map((it) => getTemplatePhoto(it)).join(`\n`);
 
   const typesTransport = offers.map((it) => it.type);
   const cityDest = cities.map((it) => it.name);
@@ -41,7 +41,7 @@ const getTemplateFormCreate = (pointModel, transport, visual, visualDest, saveBt
   // // Офер
   const getOffers = (it) => {
     let isChecked = ``;
-    for (const item of offer) {
+    for (const item of offersData) {
       if (it.title === item.name) {
         isChecked = (item.checked) ? `checked` : ``;
       }
@@ -138,7 +138,7 @@ const getTemplateFormCreate = (pointModel, transport, visual, visualDest, saveBt
 
                 <div class="event__photos-container">
                   <div class="event__photos-tape">
-                  ${TemplatePhotoMarkup}
+                  ${templatePhotoMarkup}
                   </div>
                 </div>
               </section>

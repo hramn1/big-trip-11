@@ -6,9 +6,13 @@ const Method = {
   PUT: `PUT`,
   DELETE: `DELETE`,
 };
+const STATUS_CODE = {
+  SUCCESS: 200,
+  MULTIPLE: 300
+};
 
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status >= STATUS_CODE.SUCCESS && response.status < STATUS_CODE.MULTIPLE) {
     return response;
   } else {
     throw new Error(`${response.status}: ${response.statusText}`);
@@ -41,7 +45,6 @@ const API = class {
     return this._load({
       url: `points`,
       method: Method.POST,
-      // body: JSON.stringify(ModelPoint.toRAWPoint(point))
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({"Content-Type": `application/json`})
     })

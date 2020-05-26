@@ -4,13 +4,13 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import {encode} from "he";
 
-const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city, timeStartTrip, timeEndTrip, offer, saveBtn) => {
+const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city, timeStartTrip, timeEndTrip, offersData, saveBtn) => {
 
   const isFavorite = (tripFavor) ? ` checked` : ``;
   const offers = pointModel.getOffers();
   const cities = pointModel.getCities();
   const typesTransport = offers.map((it) => it.type);
-  const cityDest = cities.map((it) => it.name);
+  const citiesDestination = cities.map((it) => it.name);
   const getTripTypeWithPre = () => {
     return `${getCappitlize(transport)} ${getPreTitleCity(transport)}`;
   };
@@ -26,8 +26,8 @@ const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city, ti
   const typeActivityMarkup = typesTransport.filter((item) => ACTIVITY_EVENT_TYPES.includes(item)).map((it) => typeTransport(it)).join(`\n`);
   // Офер
   const getOffers = (it) => {
-    const offerTittleChecked = offer.map((item) => item.title);
-    const isChecked = (offerTittleChecked.some((elem) => elem === it.title)) ? ` checked` : ``;
+    const offersTittleChecked = offersData.map((item) => item.title);
+    const isChecked = (offersTittleChecked.some((elem) => elem === it.title)) ? ` checked` : ``;
     return `
   <div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${it.title}" type="checkbox" name="${it.title}" ${isChecked}>
@@ -51,7 +51,7 @@ const editEventMarkup = (trip, pointModel, tripFavor, transport, price, city, ti
     <option value="${it}"></option>
   `;
   };
-  const cityTripMarkup = cityDest.map((it) => cityTrip(it)).join(`\n`);
+  const cityTripMarkup = citiesDestination.map((it) => cityTrip(it)).join(`\n`);
 
   return (
     `<form class="event  event--edit" action="#" method="post">

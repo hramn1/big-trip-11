@@ -77,19 +77,19 @@ export const offers = [
   }
 ];
 const generateDesk = () => {
-  const deskStr = generatorRandom.splitStr(tripData.finalDestination.description);
+  let deskStr = generatorRandom.splitStr(tripData.finalDestination.description);
   return deskStr.slice(0, Math.round(generatorRandom.generateRandomNumber(1, 5))).join();
 };
 
 export const generateTripData = () => {
-  const intervalTrip = Math.round(generatorRandom.generateRandomNumber(5, 30));
-  const timeTrip = Math.round(generatorRandom.generateRandomNumber(30, 180));
+  let intervalTrip = Math.round(generatorRandom.generateRandomNumber(5, 30));
+  let timeTrip = Math.round(generatorRandom.generateRandomNumber(30, 180));
   const getNewDateTrip = () => {
-    const tripDate = tripData.beginTrip;
+    let tripDate = tripData.beginTrip;
     return new Date(tripDate.setMinutes(tripDate.getMinutes() + intervalTrip + timeTrip));
   };
   const getEndDateTrip = () => {
-    const tripDate = tripData.beginTrip;
+    let tripDate = tripData.beginTrip;
     return new Date(tripDate.setMinutes(tripDate.getMinutes() + timeTrip));
   };
 
@@ -124,4 +124,19 @@ export const generateFilters = () => {
     },
   ];
 };
-
+export const generateSort = () => {
+  return [
+    {
+      name: `event`,
+      currentFilter: false
+    },
+    {
+      name: `time`,
+      currentFilter: false
+    },
+    {
+      name: `price`,
+      currentFilter: false
+    }
+  ];
+};

@@ -160,9 +160,13 @@ export default class BoardController {
     } else if (oldData === null) {
       this._api.createPoint(newData)
         .then(() => {
-          this._pointModel.addPoint(newData);
+          this._api.getPoints()
+            .then((points) =>{
+              const updatePoints = points;
+              newData.id = updatePoints[updatePoints.length - 1].id;
+              this._pointModel.addPoint(newData);
+            });
           this._updatePoints();
-
         })
         .catch(() => {
           this.newEventController.shake();
