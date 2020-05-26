@@ -124,19 +124,4 @@ export const generateFilters = () => {
     },
   ];
 };
-export const generateSort = () => {
-  return [
-    {
-      name: `event`,
-      currentFilter: false
-    },
-    {
-      name: `time`,
-      currentFilter: false
-    },
-    {
-      name: `price`,
-      currentFilter: false
-    }
-  ];
-};
+

@@ -1,5 +1,5 @@
 import {default as AbstractSmartComponent} from "./abstract-smart";
-import {getPreTitleCity, getCappitlize, parseFormatTime, generateId, TRANSFER_EVENT_TYPES, ACTIVITY_EVENT_TYPES} from "../utils";
+import {getPreTitleCity, getCappitlize, parseFormatTime, TRANSFER_EVENT_TYPES, ACTIVITY_EVENT_TYPES} from "../utils";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import {encode} from "he";
@@ -212,7 +212,6 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
       }
     }
     return {
-      id: generateId(),
       type: this.transport,
       city: this.city,
       tripDate: parseFormatTime(this.timeStartTrip),

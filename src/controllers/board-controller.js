@@ -1,9 +1,8 @@
-import {render, unrender} from "../utils";
+import {render, unrender, generateSort} from "../utils";
 import {default as CreateNoEventTemplate} from "../components/no-event";
 import {default as CreateSort} from "../components/sort";
 import {default as CreateSortContainer} from "../components/sort-container";
 import {default as CreateFilterTemplate} from "../components/filters";
-import {generateSort} from "../data";
 import {default as CreateTripDays} from "../components/trip-days";
 import {default as TripController} from "./trip-controller";
 import {default as NewEventController} from "./new-event-controller";
@@ -49,7 +48,7 @@ export default class BoardController {
     const trips = this._pointModel.getPoints();
     this.templatePointRouteList = new CreateTripDays(this._pointModel.getPoints());
     if (this.newEventController === null) {
-      this.newEventController = new NewEventController(this.container, trips, this._statisticsComponent, this._templateMenu, this._pointModel, this._onDataChange, this._onViewChangeNewTrip);
+      this.newEventController = new NewEventController(this.container, trips, this._statisticsComponent, this._templateMenu, this._pointModel, this._onDataChange, this._onViewChangeNewTrip, this._api);
       this.newEventController.bind();
     }
     if (trips.length === 0) {

@@ -66,7 +66,6 @@ const startApplication = (points, cities, offers) => {
     }
   });
 };
-
 api.getPoints()
   .then((points) => {
     api.getCities()

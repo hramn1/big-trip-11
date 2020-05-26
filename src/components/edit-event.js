@@ -163,7 +163,6 @@ export default class CreateEditEvent extends AbstractSmartComponent {
   }
 
   reset() {
-    this.tripFavor = !!this.trip.favorites;
     this.transport = this.trip.type;
     this.priceTrip = this.trip.price;
     this.city = this.trip.city;

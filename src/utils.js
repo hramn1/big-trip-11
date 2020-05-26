@@ -136,6 +136,19 @@ export const parseFormatTime = (timeText) => {
     return newDate;
   }
 };
-export const generateId = () => {
-  return String(30 + Math.floor(Math.random() * 10));
+export const generateSort = () => {
+  return [
+    {
+      name: `event`,
+      currentFilter: false
+    },
+    {
+      name: `time`,
+      currentFilter: false
+    },
+    {
+      name: `price`,
+      currentFilter: false
+    }
+  ];
 };

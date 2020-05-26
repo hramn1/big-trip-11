@@ -1,7 +1,9 @@
 import {default as CreateFormNewEventTemplate} from '../components/new-event';
 import {Position, render, unrender} from "../utils";
+
+
 export default class NewEventController {
-  constructor(container, trips, statisticsComponent, templateMenu, pointModel, onDataChange, onViewChangeNewTrip) {
+  constructor(container, trips, statisticsComponent, templateMenu, pointModel, onDataChange, onViewChangeNewTrip, api) {
     this.trips = trips;
     this.pointModel = pointModel;
     this._onDataChange = onDataChange;
@@ -9,6 +11,7 @@ export default class NewEventController {
     this._statisticsComponent = statisticsComponent;
     this._templateMenu = templateMenu;
     this.templateFormCreatej = null;
+    this.api = api;
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
   bind() {
@@ -73,15 +76,19 @@ export default class NewEventController {
   }
   saveTrip() {
     const newObj = this.templateFormCreatej.getData();
-    const saveTrip = Object.create(this.trips[0]);
     this.templateFormCreatej.getElement().querySelector(`.event__save-btn`).textContent = `Saving`;
-    for (const key in newObj) {
-      if (Object.prototype.hasOwnProperty.call(newObj, key)) {
-        Object.defineProperty(saveTrip, key, {
-          value: newObj[key]
-        });
-      }
-    }
-    this._onDataChange(null, saveTrip);
+
+    this.api.getPoints()
+      .then((points) => {
+        const saveTrip = points[0];
+        for (const key in newObj) {
+          if (Object.prototype.hasOwnProperty.call(newObj, key)) {
+            Object.defineProperty(saveTrip, key, {
+              value: newObj[key]
+            });
+          }
+        }
+        this._onDataChange(null, saveTrip);
+      });
   }
 }
