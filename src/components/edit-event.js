@@ -204,7 +204,9 @@ export default class CreateEditEvent extends AbstractSmartComponent {
   _favoriteEvent() {
     this.tripFavor = !this.tripFavor;
     this.rerender();
+    this.saveFavorite(this.tripFavor);
   }
+  saveFavorite() {}
 
   _validatePrice(evt) {
     if (isNaN(evt.target.value)) {

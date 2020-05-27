@@ -146,7 +146,7 @@ export default class BoardController {
     this.sortTemplate.hide();
 
   }
-  _onDataChange(oldData, newData) {
+  _onDataChange(oldData, newData, changeFavorite = false) {
     const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
     if (newData === null) {
       this._api.deletePoint(oldData.id)
@@ -173,14 +173,21 @@ export default class BoardController {
           this.newEventController.shake();
         });
     } else {
-      this._api.updatePoint(oldData.id, newData)
-        .then(() => {
-          this._pointModel.updatePoint(oldData.id, newData);
-          this._updatePoints();
-        })
-      .catch(() => {
-        pointController.shake();
-      });
+      if (changeFavorite === true) {
+        this._api.updatePoint(oldData.id, newData)
+          .then(() => {
+            this._pointModel.updatePoint(oldData.id, newData);
+          });
+      } else {
+        this._api.updatePoint(oldData.id, newData)
+          .then(() => {
+            this._pointModel.updatePoint(oldData.id, newData);
+            this._updatePoints();
+          })
+          .catch(() => {
+            pointController.shake();
+          });
+      }
     }
   }
 }

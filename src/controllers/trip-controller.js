@@ -33,7 +33,12 @@ export default class TripController {
       this._replaceEventToEdit();
     };
 
-
+    this.editEvent.saveFavorite = (tripFavor) => {
+      const changeFavorite = true;
+      this._onDataChange(this.trips, Object.defineProperty(this.trips, `favorites`, {
+        value: tripFavor
+      }), changeFavorite);
+    };
     this.editEvent.deleteTrip = () => {
       this.editEvent.getElement().querySelector(`.event__reset-btn`).textContent = `Deleting`;
       this._deleteTrip();
