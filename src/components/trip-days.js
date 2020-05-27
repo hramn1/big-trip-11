@@ -2,25 +2,26 @@ import {MONTH_NAMES, limitDayMouth} from "../utils";
 import {default as AbstractComponent} from './abstract';
 
 const getTemplateTripDays = (trips) => {
-  if (trips.length === 0) {
+  const sortedDefaultTrip = [...trips].sort((tripsSecond, tripsFirst) => tripsSecond.tripDate - tripsFirst.tripDate);
+  if (sortedDefaultTrip.length === 0) {
     return (
       `<ul class="trip-days"></ul>`
     );
   }
-  let dayOfMouth = trips[0].tripDate.getDate() - 1;
-  let countOfMouth = trips[0].tripDate.getMonth();
+  let dayOfMouth = sortedDefaultTrip[0].tripDate.getDate() - 1;
+  let countOfMouth = sortedDefaultTrip[0].tripDate.getMonth();
 
   const mounthMultiplier = () => {
-    if (countOfMouth === trips[trips.length - 1].tripDate.getMonth()) {
+    if (countOfMouth === sortedDefaultTrip[sortedDefaultTrip.length - 1].tripDate.getMonth()) {
       return 0;
-    } else if (trips[trips.length - 1].tripDate.getMonth() - trips[0].tripDate.getMonth() === 1) {
-      return limitDayMouth(trips[0].tripDate.getMonth());
+    } else if (sortedDefaultTrip[sortedDefaultTrip.length - 1].tripDate.getMonth() - sortedDefaultTrip[0].tripDate.getMonth() === 1) {
+      return limitDayMouth(sortedDefaultTrip[0].tripDate.getMonth());
     } else {
       return 0;
     }
   };
   const getTotalDay = () => {
-    const countDay = trips[trips.length - 1].tripDate.getDate() + mounthMultiplier() - trips[0].tripDate.getDate();
+    const countDay = sortedDefaultTrip[sortedDefaultTrip.length - 1].tripDate.getDate() + mounthMultiplier() - sortedDefaultTrip[0].tripDate.getDate();
     return countDay;
   };
   const totalDay = getTotalDay();
@@ -30,7 +31,7 @@ const getTemplateTripDays = (trips) => {
   }
   const templateDay = (it) => {
     dayOfMouth = dayOfMouth + 1;
-    if (dayOfMouth > limitDayMouth(trips[0].tripDate.getMonth())) {
+    if (dayOfMouth > limitDayMouth(sortedDefaultTrip[0].tripDate.getMonth())) {
       dayOfMouth = 1;
       countOfMouth += 1;
     }
@@ -52,11 +53,11 @@ const getTemplateTripDays = (trips) => {
   );
 };
 export default class CreateTripDays extends AbstractComponent {
-  constructor(trip) {
+  constructor(trips) {
     super();
-    this.trip = trip;
+    this.trips = trips;
   }
   getTemplate() {
-    return getTemplateTripDays(this.trip);
+    return getTemplateTripDays(this.trips);
   }
 }

@@ -1,7 +1,7 @@
 import {default as CreatePointRoute} from '../components/route-point';
 import {default as CreateEditEven} from '../components/edit-event';
 
-import {parseFormatTime, render, replace, unrender} from "../utils";
+import {render, replace, unrender} from "../utils";
 
 const Mode = {
   DEFAULT: `default`,
@@ -54,6 +54,7 @@ export default class TripController {
     this._onDataChange(this.trips, null);
   }
   _saveTrip(newObj) {
+
     const saveTrip = Object.defineProperty(this.trips, `favorites`, {
       value: newObj.tripFavor
     });
@@ -70,10 +71,10 @@ export default class TripController {
       value: newObj.offer
     });
     Object.defineProperty(saveTrip, `tripDate`, {
-      value: parseFormatTime(newObj.timeStartTrip)
+      value: newObj.timeStartTrip
     });
     Object.defineProperty(saveTrip, `tripDateEnd`, {
-      value: parseFormatTime(newObj.timeEndTrip)
+      value: newObj.timeEndTrip
     });
     this._onDataChange(this.trips, saveTrip);
     document.removeEventListener(`keydown`, this._onEscKeyDown);

@@ -1,5 +1,5 @@
 import {default as AbstractSmartComponent} from "./abstract-smart";
-import {getPreTitleCity, getCappitlize, parseFormatTime, TRANSFER_EVENT_TYPES, ACTIVITY_EVENT_TYPES} from "../utils";
+import {getPreTitleCity, getCappitlize, TRANSFER_EVENT_TYPES, ACTIVITY_EVENT_TYPES} from "../utils";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import {encode} from "he";
@@ -214,8 +214,8 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     return {
       type: this.transport,
       city: this.city,
-      tripDate: parseFormatTime(this.timeStartTrip),
-      tripDateEnd: parseFormatTime(this.timeEndTrip),
+      tripDate: this.timeStartTrip,
+      tripDateEnd: this.timeEndTrip,
       price: Number(this.price),
       offers: dataOffer,
       favorites: false,
@@ -249,11 +249,11 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     this.rerender();
   }
   _startTrip(evt) {
-    this.timeStartTrip = evt.target.value;
+    this.timeStartTrip = evt.target._flatpickr.selectedDates[0];
     this.rerender();
   }
   _endTrip(evt) {
-    this.timeEndTrip = evt.target.value;
+    this.timeEndTrip = evt.target._flatpickr.selectedDates[0];
     this.rerender();
   }
   saveTrip() {}
@@ -264,6 +264,7 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
   }
   _changeTypeTransport(evt) {
     this.transport = evt.target.value;
+    this.offer = this.pointModel.getOffers().filter((it) => it === this.transport);
     this._validate();
     this.visual = ``;
     this.rerender();
@@ -287,10 +288,10 @@ export default class CreateFormNewEventTemplate extends AbstractSmartComponent {
     this._element.querySelector(`.event__input--price`).addEventListener(`change`, (evt) => {
       this._getPrice(evt);
     });
-    this._element.querySelector(`#event-start-time-1`).addEventListener(`input`, (evt) => {
+    this._element.querySelector(`#event-start-time-1`).addEventListener(`change`, (evt) => {
       this._startTrip(evt);
     });
-    this._element.querySelector(`#event-end-time-1`).addEventListener(`input`, (evt) => {
+    this._element.querySelector(`#event-end-time-1`).addEventListener(`change`, (evt) => {
       this._endTrip(evt);
     });
     if (this._element.querySelectorAll(`.event__offer-checkbox`).length > 0) {

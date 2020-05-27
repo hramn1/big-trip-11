@@ -18,7 +18,7 @@ export const ACTIVITY_EVENT_TYPES = [
   `sightseeing`,
   `restaurant`
 ];
-export const AUTHORIZATION = `Basic er883jdzbdwh`;
+export const AUTHORIZATION = `Basic er883jdzbdwhr2`;
 export const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 export const MONTH_NAMES = [
   `JAN`,
@@ -121,20 +121,6 @@ export const limitDayMouth = (countOfMouth) => {
 export const getCappitlize = (str) => {
   const firstWord = str[0].toUpperCase();
   return str.replace(str[0], firstWord);
-};
-export const parseFormatTime = (timeText) => {
-  if (!isNaN(new Date(timeText))) {
-    return timeText;
-  } else {
-    // в формате DD/MM/YY hh:mm
-    const newDate = new Date();
-
-    newDate.setFullYear(2000 + parseInt(timeText.slice(6, 8), 10), parseInt(timeText.slice(3, 5), 10) - 1, parseInt(timeText.slice(0, 2), 10));
-
-    newDate.setHours(parseInt(timeText.slice(9, 11), 10), parseInt(timeText.slice(12, 14), 10), 0, 0);
-
-    return newDate;
-  }
 };
 export const generateSort = () => {
   return [

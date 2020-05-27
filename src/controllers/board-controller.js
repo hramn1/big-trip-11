@@ -45,7 +45,8 @@ export default class BoardController {
   }
 
   init() {
-    const trips = this._pointModel.getPoints();
+    let trips = this._pointModel.getPoints();
+    trips = [...trips].sort((tripsSecond, tripsFirst) => tripsSecond.tripDate - tripsFirst.tripDate);
     this.templatePointRouteList = new CreateTripDays(this._pointModel.getPoints());
     if (this.newEventController === null) {
       this.newEventController = new NewEventController(this.container, trips, this._statisticsComponent, this._templateMenu, this._pointModel, this._onDataChange, this._onViewChangeNewTrip, this._api);
@@ -165,8 +166,8 @@ export default class BoardController {
               const updatePoints = points;
               newData.id = updatePoints[updatePoints.length - 1].id;
               this._pointModel.addPoint(newData);
+              this._updatePoints();
             });
-          this._updatePoints();
         })
         .catch(() => {
           this.newEventController.shake();

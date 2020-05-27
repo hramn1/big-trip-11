@@ -13,7 +13,6 @@ const getTemplatePointRoute = (trip) => {
   };
   const cutOffers = trip.offers.slice(0, 3);
   const offerTripMarkup = cutOffers.map((item) => offerTripPoint(item)).join(`\n`);
-
   const getHourMinuteStart = (tripDate) => {
     const hourMinute = `${addZero(tripDate.getHours())}:${addZero(tripDate.getMinutes())}`;
     return hourMinute;
