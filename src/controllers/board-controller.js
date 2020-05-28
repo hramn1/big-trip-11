@@ -146,7 +146,7 @@ export default class BoardController {
     this.sortTemplate.hide();
 
   }
-  _onDataChange(oldData, newData, changeFavorite = false) {
+  _onDataChange(oldData, newData, tripFavorite = false) {
     const pointController = this._showedTripControllers.find((item) => (item.trips === oldData));
     if (newData === null) {
       this._api.deletePoint(oldData.id)
