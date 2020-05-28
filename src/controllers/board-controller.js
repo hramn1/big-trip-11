@@ -173,7 +173,7 @@ export default class BoardController {
           this.newEventController.shake();
         });
     } else {
-      if (changeFavorite === true) {
+      if (tripFavorite === true) {
         this._api.updatePoint(oldData.id, newData)
           .then(() => {
             this._pointModel.updatePoint(oldData.id, newData);
