@@ -19,7 +19,7 @@ export const ACTIVITY_EVENT_TYPES = [
   `restaurant`
 ];
 export const AUTHORIZATION = `Basic er883jdzbdwhr2`;
-export const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
+export const END_POINT = `https://14.ecmascript.pages.academy/big-trip`;
 export const MONTH_NAMES = [
   `JAN`,
   `FEB`,
